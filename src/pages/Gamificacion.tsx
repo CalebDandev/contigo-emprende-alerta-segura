@@ -26,7 +26,7 @@ const Gamificacion = () => {
                   <span className="text-gray-500 mx-2">/</span>
                 </li>
                 <li className="text-bcp-blue font-medium" aria-current="page">
-                  Aprende Jugando
+                  Zona Resiliente BCP
                 </li>
               </ol>
             </nav>

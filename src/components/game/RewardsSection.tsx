@@ -5,12 +5,15 @@ import { Badge } from '@/components/ui/badge';
 import { 
   Gift, 
   Award, 
-  Bookmark, 
+  BookOpen, 
   FileText, 
   Briefcase,
   Lock,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  Shield,
+  Lightbulb,
+  Rocket
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -28,8 +31,8 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userCoins }) => {
       });
     } else {
       toast({
-        title: "No tienes suficientes AlertaCoins",
-        description: `Necesitas ${cost - userCoins} AlertaCoins más para esta recompensa`,
+        title: "No tienes suficientes Soles de Resiliencia",
+        description: `Necesitas ${cost - userCoins} Soles más para esta recompensa`,
         variant: "destructive",
       });
     }
@@ -38,8 +41,8 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userCoins }) => {
   const rewards = [
     {
       id: "cert1",
-      title: "Certificado Digital",
-      description: "Certificado oficial de Emprendedor Preparado por BCP.",
+      title: "Certificado Digital de Resiliencia",
+      description: "Certificado oficial de Emprendedor Resiliente avalado por BCP.",
       icon: <FileText className="h-8 w-8 text-bcp-blue" />,
       cost: 50,
       color: "bg-blue-50 border-blue-200",
@@ -47,17 +50,17 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userCoins }) => {
     },
     {
       id: "curso1",
-      title: "Curso Premium",
-      description: "Acceso al curso premium 'Estrategias ante crisis financieras'.",
-      icon: <Bookmark className="h-8 w-8 text-purple-600" />,
+      title: "Curso Premium: Finanzas en Crisis",
+      description: "Acceso al curso premium 'Estrategias financieras ante crisis empresariales'.",
+      icon: <BookOpen className="h-8 w-8 text-purple-600" />,
       cost: 75,
       color: "bg-purple-50 border-purple-200",
       textColor: "text-purple-700"
     },
     {
       id: "toolkit1",
-      title: "Kit Emprendedor",
-      description: "Participa en el sorteo mensual de un kit con materiales y herramientas.",
+      title: "Kit Emprendedor Resiliente",
+      description: "Participa en el sorteo mensual de un kit con herramientas para tu negocio.",
       icon: <Briefcase className="h-8 w-8 text-green-600" />,
       cost: 100,
       color: "bg-green-50 border-green-200",
@@ -65,18 +68,18 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userCoins }) => {
     },
     {
       id: "ment1",
-      title: "Mentoría Personalizada",
-      description: "Una hora de mentoría con un especialista en continuidad de negocio.",
-      icon: <Award className="h-8 w-8 text-amber-600" />,
+      title: "Mentoría de Contingencia",
+      description: "Una hora de mentoría con un especialista en resiliencia empresarial.",
+      icon: <Lightbulb className="h-8 w-8 text-amber-600" />,
       cost: 200,
       color: "bg-amber-50 border-amber-200",
       textColor: "text-amber-700"
     },
     {
       id: "capital1",
-      title: "Capital Semilla",
-      description: "Participa en la convocatoria para capital semilla de S/. 1,000.",
-      icon: <Gift className="h-8 w-8 text-red-600" />,
+      title: "Capital Semilla Resiliente",
+      description: "Participa en la convocatoria para capital semilla de S/. 1,000 para tu negocio.",
+      icon: <Rocket className="h-8 w-8 text-red-600" />,
       cost: 500,
       color: "bg-red-50 border-red-200",
       textColor: "text-red-700"
@@ -85,12 +88,17 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userCoins }) => {
 
   return (
     <>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold mb-4">Arsenal del Emprendedor Resiliente</h2>
+        <p className="text-gray-600">Utiliza tus Soles de Resiliencia para desbloquear recursos que fortalecerán tu negocio.</p>
+      </div>
+
       <div className="mb-6 p-5 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center">
-        <AlertCircle className="h-8 w-8 text-amber-500 mr-4" />
+        <AlertCircle className="h-8 w-8 text-amber-500 mr-4 flex-shrink-0" />
         <div>
-          <h3 className="font-semibold text-amber-800 mb-1">¿Cómo conseguir más AlertaCoins?</h3>
+          <h3 className="font-semibold text-amber-800 mb-1">¿Cómo conseguir más Soles de Resiliencia?</h3>
           <p className="text-amber-700">
-            Completa juegos y desafíos, mantén racha diaria de aprendizaje y comparte tu perfil con otros emprendedores.
+            Completa desafíos, mantén una racha diaria de aprendizaje y comparte tu perfil con otros emprendedores para ganar más Soles.
           </p>
         </div>
       </div>
@@ -123,15 +131,18 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userCoins }) => {
               <p className="text-gray-600 text-sm mb-4 flex-grow">{reward.description}</p>
               
               <div className="flex justify-between items-center mb-4">
-                <span className="font-medium text-amber-600">{reward.cost} AlertaCoins</span>
+                <div className="flex items-center">
+                  <Shield className="h-4 w-4 text-amber-600 mr-1" />
+                  <span className="font-medium text-amber-600">{reward.cost} Soles de Resiliencia</span>
+                </div>
               </div>
               
               <Button 
                 onClick={() => handleClaimReward(reward.id, reward.title, reward.cost)}
                 disabled={!isAvailable}
-                className={`w-full ${!isAvailable ? 'bg-gray-300 cursor-not-allowed' : 'bg-bcp-blue hover:bg-bcp-blue/90'}`}
+                className={`w-full ${!isAvailable ? 'bg-gray-300 cursor-not-allowed' : 'bg-gradient-bcp hover:bg-opacity-90'}`}
               >
-                {isAvailable ? 'Reclamar recompensa' : `Te faltan ${reward.cost - userCoins} AlertaCoins`}
+                {isAvailable ? 'Reclamar recompensa' : `Te faltan ${reward.cost - userCoins} Soles`}
               </Button>
             </div>
           );

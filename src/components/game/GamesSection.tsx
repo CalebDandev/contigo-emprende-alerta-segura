@@ -16,6 +16,7 @@ import {
   Rocket
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import TormentaInminente from './TormentaInminente';
 
 interface GamesSectionProps {
   onEarnCoins: (amount: number) => void;
@@ -23,6 +24,7 @@ interface GamesSectionProps {
 
 const GamesSection: React.FC<GamesSectionProps> = ({ onEarnCoins }) => {
   const [completedGames, setCompletedGames] = useState<string[]>([]);
+  const [activeFilter, setActiveFilter] = useState('all');
   
   const handleStartGame = (gameId: string, gameTitle: string) => {
     // En una implementación real, esto abriría el juego
@@ -116,28 +118,56 @@ const GamesSection: React.FC<GamesSectionProps> = ({ onEarnCoins }) => {
     }
   ];
 
+  // Filter games by type
+  const filteredGames = activeFilter === 'all' 
+    ? games 
+    : games.filter(game => game.type.toLowerCase().includes(activeFilter.toLowerCase()));
+
   return (
     <>
+      {/* Featured game - Tormenta Inminente */}
+      <TormentaInminente onEarnCoins={onEarnCoins} />
+      
       <div className="mb-6 flex flex-col md:flex-row justify-between items-center">
-        <h2 className="text-2xl font-bold mb-2 md:mb-0">Rutas Resilientes</h2>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="text-xs">
+        <h2 className="text-2xl font-bold mb-2 md:mb-0">Otros Desafíos</h2>
+        <div className="flex flex-wrap gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className={`text-xs ${activeFilter === 'all' ? 'bg-gray-100' : ''}`}
+            onClick={() => setActiveFilter('all')}
+          >
             Todos
           </Button>
-          <Button variant="outline" size="sm" className="text-xs">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className={`text-xs ${activeFilter === 'desafío' ? 'bg-gray-100' : ''}`}
+            onClick={() => setActiveFilter('desafío')}
+          >
             Desafíos Rápidos
           </Button>
-          <Button variant="outline" size="sm" className="text-xs">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className={`text-xs ${activeFilter === 'simulación' ? 'bg-gray-100' : ''}`}
+            onClick={() => setActiveFilter('simulación')}
+          >
             Simulaciones
           </Button>
-          <Button variant="outline" size="sm" className="text-xs">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className={`text-xs ${activeFilter === 'ruta' ? 'bg-gray-100' : ''}`}
+            onClick={() => setActiveFilter('ruta')}
+          >
             Rutas
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {games.map((game) => (
+        {filteredGames.map((game) => (
           <div 
             key={game.id} 
             className={`${game.color} border rounded-xl p-5 flex flex-col h-full transition-all hover:shadow-md`}

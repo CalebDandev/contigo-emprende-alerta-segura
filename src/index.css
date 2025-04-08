@@ -99,4 +99,8 @@
   .bcp-section {
     @apply py-12 md:py-20;
   }
+  
+  .bg-gradient-bcp {
+    @apply bg-gradient-to-r from-bcp-blue to-blue-500 text-white hover:opacity-95 transition-opacity;
+  }
 }

@@ -1,0 +1,518 @@
+
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { AlertCircle, ArrowRight, Check, CloudLightning, Clock, Coins, Heart, LineChart, Shield, Trophy, Users } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+import GameIntro from './GameIntro';
+import ActionCard from './ActionCard';
+import GameMetrics from './GameMetrics';
+import GameResult from './GameResult';
+
+interface StormGameProps {
+  onComplete: (points: number) => void;
+  onClose: () => void;
+}
+
+type GamePhase = 'intro' | 'preparation' | 'crisis' | 'recovery' | 'result';
+
+interface GameMetric {
+  name: string;
+  value: number;
+  icon: React.ReactNode;
+  color: string;
+}
+
+interface Action {
+  id: string;
+  title: string;
+  description: string;
+  impact: {
+    economy: number;
+    trust: number;
+    morale: number;
+  };
+  category: 'finance' | 'operations' | 'people' | 'marketing' | 'tech';
+  icon: React.ReactNode;
+}
+
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  category: 'finance' | 'operations' | 'people' | 'marketing' | 'tech';
+  severity: 'low' | 'medium' | 'high';
+}
+
+const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
+  const [phase, setPhase] = useState<GamePhase>('intro');
+  const [round, setRound] = useState(1);
+  const [totalRounds, setTotalRounds] = useState(5); // Changes per phase
+  const [availableActions, setAvailableActions] = useState<Action[]>([]);
+  const [selectedActions, setSelectedActions] = useState<Action[]>([]);
+  const [metrics, setMetrics] = useState({
+    economy: 100,
+    trust: 100,
+    morale: 100,
+  });
+  const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
+  const [actionsPerRound, setActionsPerRound] = useState(2);
+  const [gameScore, setGameScore] = useState(0);
+  const [achievements, setAchievements] = useState<string[]>([]);
+  
+  // Helper to calculate total score based on metrics
+  const calculateScore = () => {
+    return Math.round((metrics.economy + metrics.trust + metrics.morale) / 3);
+  };
+  
+  // Prepare action lists
+  useEffect(() => {
+    // Reset game state when phase changes
+    if (phase === 'preparation') {
+      setRound(1);
+      setTotalRounds(5);
+      setActionsPerRound(2);
+      setAvailableActions(preparationActions);
+      setSelectedActions([]);
+    } else if (phase === 'crisis') {
+      setRound(1);
+      setTotalRounds(3);
+      setActionsPerRound(1);
+      triggerRandomEvent();
+    } else if (phase === 'recovery') {
+      setRound(1);
+      setTotalRounds(2);
+      setActionsPerRound(2);
+      setAvailableActions(recoveryActions);
+      setSelectedActions([]);
+    } else if (phase === 'result') {
+      const finalScore = calculateScore();
+      setGameScore(finalScore);
+      
+      // Determine achievements based on final metrics
+      const newAchievements = [];
+      
+      if (metrics.economy >= 80) newAchievements.push("Gestor Financiero");
+      if (metrics.trust >= 80) newAchievements.push("Líder Confiable");
+      if (metrics.morale >= 80) newAchievements.push("Motivador del Equipo");
+      if (finalScore >= 85) newAchievements.push("Capitán Resiliente");
+      if (metrics.economy >= 90 && metrics.trust >= 90 && metrics.morale >= 90) {
+        newAchievements.push("Emprendedor de Hierro");
+      }
+      
+      setAchievements(newAchievements);
+      
+      // Apply final score as earned coins
+      const earnedCoins = Math.max(10, Math.round(finalScore / 2));
+      setTimeout(() => onComplete(earnedCoins), 500);
+    }
+  }, [phase]);
+  
+  // Actions that can be taken during preparation phase
+  const preparationActions: Action[] = [
+    {
+      id: "prep1",
+      title: "Fondo de Emergencia",
+      description: "Crear un fondo para cubrir 3 meses de gastos operativos",
+      impact: { economy: -5, trust: 5, morale: 3 },
+      category: "finance",
+      icon: <Shield className="h-8 w-8 text-blue-500" />
+    },
+    {
+      id: "prep2",
+      title: "Plan de Comunicación",
+      description: "Establecer canales de comunicación alternativos con clientes y equipo",
+      impact: { economy: -2, trust: 8, morale: 5 },
+      category: "marketing",
+      icon: <Users className="h-8 w-8 text-green-500" />
+    },
+    {
+      id: "prep3",
+      title: "Capacitar al Equipo",
+      description: "Entrenar a tu personal en gestión de crisis y roles alternativos",
+      impact: { economy: -5, trust: 3, morale: 10 },
+      category: "people",
+      icon: <Heart className="h-8 w-8 text-red-500" />
+    },
+    {
+      id: "prep4",
+      title: "Automatizar Procesos",
+      description: "Implementar herramientas digitales para procesos críticos",
+      impact: { economy: -10, trust: 5, morale: 5 },
+      category: "tech",
+      icon: <LineChart className="h-8 w-8 text-purple-500" />
+    },
+    {
+      id: "prep5",
+      title: "Diversificar Proveedores",
+      description: "Identificar y establecer relaciones con proveedores alternativos",
+      impact: { economy: -3, trust: 5, morale: 2 },
+      category: "operations",
+      icon: <Coins className="h-8 w-8 text-amber-500" />
+    },
+    {
+      id: "prep6",
+      title: "Seguro de Negocio",
+      description: "Contratar un seguro que cubra interrupciones del negocio",
+      impact: { economy: -7, trust: 8, morale: 3 },
+      category: "finance",
+      icon: <Shield className="h-8 w-8 text-blue-500" />
+    },
+  ];
+  
+  // Actions that can be taken during recovery phase
+  const recoveryActions: Action[] = [
+    {
+      id: "rec1",
+      title: "Campaña de Confianza",
+      description: "Comunicar los aprendizajes y mejoras a tus clientes",
+      impact: { economy: -3, trust: 15, morale: 5 },
+      category: "marketing",
+      icon: <Heart className="h-8 w-8 text-red-500" />
+    },
+    {
+      id: "rec2",
+      title: "Innovación de Servicios",
+      description: "Desarrollar nuevas ofertas que respondan a la realidad post-crisis",
+      impact: { economy: -5, trust: 10, morale: 8 },
+      category: "operations",
+      icon: <LineChart className="h-8 w-8 text-purple-500" />
+    },
+    {
+      id: "rec3",
+      title: "Análisis Financiero",
+      description: "Revisar y reajustar el plan financiero para recuperación",
+      impact: { economy: 12, trust: 3, morale: 2 },
+      category: "finance",
+      icon: <Coins className="h-8 w-8 text-amber-500" />
+    },
+    {
+      id: "rec4",
+      title: "Reconocimiento al Equipo",
+      description: "Implementar un programa de reconocimiento por la resiliencia mostrada",
+      impact: { economy: -2, trust: 5, morale: 15 },
+      category: "people",
+      icon: <Trophy className="h-8 w-8 text-green-500" />
+    },
+  ];
+  
+  // Possible crisis events
+  const crisisEvents: Event[] = [
+    {
+      id: "crisis1",
+      title: "Caída de Sistemas",
+      description: "Tus sistemas informáticos han fallado. ¿Cómo responderás?",
+      category: "tech",
+      severity: "medium"
+    },
+    {
+      id: "crisis2",
+      title: "Crisis de Liquidez",
+      description: "Un cliente importante ha retrasado un pago considerable. ¿Qué harás?",
+      category: "finance",
+      severity: "high"
+    },
+    {
+      id: "crisis3",
+      title: "Problema con Proveedor",
+      description: "Tu proveedor principal ha dejado de operar sin previo aviso.",
+      category: "operations",
+      severity: "medium"
+    },
+    {
+      id: "crisis4",
+      title: "Crisis de Reputación",
+      description: "Ha surgido una queja viral sobre tu servicio en redes sociales.",
+      category: "marketing",
+      severity: "high"
+    },
+    {
+      id: "crisis5",
+      title: "Conflicto en el Equipo",
+      description: "Ha surgido un conflicto importante entre miembros clave del equipo.",
+      category: "people",
+      severity: "medium"
+    },
+  ];
+
+  // Trigger a random crisis event
+  const triggerRandomEvent = () => {
+    const randomIndex = Math.floor(Math.random() * crisisEvents.length);
+    setCurrentEvent(crisisEvents[randomIndex]);
+    
+    // Generate response options based on previous preparations
+    const eventResponses = generateEventResponses(crisisEvents[randomIndex]);
+    setAvailableActions(eventResponses);
+    setSelectedActions([]);
+  };
+
+  // Generate response options based on event and previous preparations
+  const generateEventResponses = (event: Event): Action[] => {
+    // Basic responses always available
+    const basicResponses: Action[] = [
+      {
+        id: `response-basic-${event.category}`,
+        title: "Respuesta Básica",
+        description: "Atender la situación con los recursos disponibles",
+        impact: { economy: -10, trust: -5, morale: -5 },
+        category: event.category,
+        icon: <AlertCircle className="h-8 w-8 text-amber-500" />
+      }
+    ];
+    
+    // Check if user had prepared for this type of crisis
+    const hasPrepared = selectedActions.some(action => action.category === event.category);
+    
+    if (hasPrepared) {
+      // Add enhanced response options if they prepared
+      basicResponses.push({
+        id: `response-prepared-${event.category}`,
+        title: "Respuesta Preparada",
+        description: "Implementar el plan de contingencia que preparaste",
+        impact: { economy: 5, trust: 10, morale: 10 },
+        category: event.category,
+        icon: <Check className="h-8 w-8 text-green-500" />
+      });
+    }
+    
+    // Add one more option that's always available but with varying effectiveness
+    basicResponses.push({
+      id: `response-creative-${event.category}`,
+      title: "Solución Creativa",
+      description: "Intentar una aproximación innovadora al problema",
+      impact: { 
+        economy: hasPrepared ? -5 : -15, 
+        trust: hasPrepared ? 5 : 0, 
+        morale: hasPrepared ? 8 : -3 
+      },
+      category: event.category,
+      icon: <CloudLightning className="h-8 w-8 text-purple-500" />
+    });
+    
+    return basicResponses;
+  };
+
+  // Handle action selection
+  const handleSelectAction = (action: Action) => {
+    if (selectedActions.length >= actionsPerRound) {
+      toast({
+        title: "¡Acciones limitadas!",
+        description: `Solo puedes elegir ${actionsPerRound} acciones por ronda.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Add action to selected
+    setSelectedActions(prev => [...prev, action]);
+    
+    // Apply impacts to metrics
+    setMetrics(prev => ({
+      economy: Math.max(0, Math.min(100, prev.economy + action.impact.economy)),
+      trust: Math.max(0, Math.min(100, prev.trust + action.impact.trust)),
+      morale: Math.max(0, Math.min(100, prev.morale + action.impact.morale)),
+    }));
+    
+    // Remove from available actions to prevent reselection
+    setAvailableActions(prev => prev.filter(a => a.id !== action.id));
+    
+    toast({
+      title: "¡Acción seleccionada!",
+      description: action.title,
+    });
+  };
+
+  // Progress to next round or phase
+  const handleNextRound = () => {
+    if (selectedActions.length < actionsPerRound && phase !== 'result') {
+      toast({
+        title: "Acciones pendientes",
+        description: `Debes seleccionar ${actionsPerRound} acciones para continuar.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (round < totalRounds) {
+      // Move to next round in current phase
+      setRound(prev => prev + 1);
+      setSelectedActions([]);
+      
+      if (phase === 'crisis') {
+        // New event for each crisis round
+        triggerRandomEvent();
+      }
+    } else {
+      // Move to next phase
+      if (phase === 'intro') {
+        setPhase('preparation');
+      } else if (phase === 'preparation') {
+        setPhase('crisis');
+      } else if (phase === 'crisis') {
+        setPhase('recovery');
+      } else if (phase === 'recovery') {
+        setPhase('result');
+      }
+    }
+  };
+
+  // Game phase title and description
+  const getPhaseInfo = () => {
+    switch (phase) {
+      case 'intro':
+        return {
+          title: "Tormenta Inminente",
+          description: "Tu negocio está creciendo... pero algo se avecina. ¿Estás preparado para lo inesperado?"
+        };
+      case 'preparation':
+        return {
+          title: "Fase de Preparación",
+          description: "Elige sabiamente. Cada acción puede marcar la diferencia cuando la tormenta llegue."
+        };
+      case 'crisis':
+        return {
+          title: "¡La Crisis ha Llegado!",
+          description: currentEvent?.description || "Es hora de enfrentar los desafíos con lo que has preparado."
+        };
+      case 'recovery':
+        return {
+          title: "Fase de Recuperación",
+          description: "La tormenta está pasando. Es momento de reconstruir y aprender."
+        };
+      case 'result':
+        return {
+          title: "Resultados",
+          description: "Sobreviviste a la tormenta. No todos los días son fáciles, pero hoy estás más fuerte que ayer."
+        };
+      default:
+        return {
+          title: "Tormenta Inminente",
+          description: "Prepárate para enfrentar desafíos inesperados en tu negocio."
+        };
+    }
+  };
+
+  const phaseInfo = getPhaseInfo();
+
+  // Format metrics for display
+  const formattedMetrics = [
+    {
+      name: "Economía",
+      value: metrics.economy,
+      icon: <Coins className="h-4 w-4" />,
+      color: "bg-amber-500"
+    },
+    {
+      name: "Confianza",
+      value: metrics.trust,
+      icon: <Heart className="h-4 w-4" />,
+      color: "bg-red-500"
+    },
+    {
+      name: "Moral",
+      value: metrics.morale,
+      icon: <Users className="h-4 w-4" />,
+      color: "bg-green-500"
+    }
+  ];
+
+  return (
+    <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      {phase === 'intro' ? (
+        <GameIntro onStart={handleNextRound} />
+      ) : phase === 'result' ? (
+        <GameResult 
+          metrics={metrics} 
+          score={gameScore} 
+          achievements={achievements}
+          onClose={onClose} 
+        />
+      ) : (
+        <Card className="border-0 shadow-none">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b">
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="text-2xl text-bcp-blue">{phaseInfo.title}</CardTitle>
+                <CardDescription className="mt-2 text-gray-700">{phaseInfo.description}</CardDescription>
+              </div>
+              <Badge 
+                variant="outline" 
+                className={`font-semibold px-3 py-1 
+                  ${phase === 'preparation' ? 'bg-blue-100 text-blue-700 border-blue-300' : 
+                  phase === 'crisis' ? 'bg-red-100 text-red-700 border-red-300' : 
+                  'bg-green-100 text-green-700 border-green-300'}`}
+              >
+                {phase === 'preparation' ? 'Preparación' : 
+                 phase === 'crisis' ? 'Crisis' : 
+                 'Recuperación'}
+              </Badge>
+            </div>
+            
+            <div className="mt-4 flex items-center gap-4">
+              <div className="flex items-center">
+                <Clock className="h-4 w-4 text-bcp-blue mr-1" />
+                <span className="text-sm font-medium">Ronda {round} de {totalRounds}</span>
+              </div>
+              
+              <Progress className="h-2 flex-grow" value={(round / totalRounds) * 100} />
+            </div>
+          </CardHeader>
+          
+          <CardContent className="pt-6">
+            {/* Game metrics */}
+            <GameMetrics metrics={formattedMetrics} />
+            
+            <h3 className="font-semibold text-lg mt-6 mb-3">
+              {phase === 'preparation' ? 'Acciones de preparación disponibles' : 
+               phase === 'crisis' ? `Respuesta a: ${currentEvent?.title}` :
+               'Acciones de recuperación disponibles'}
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              {availableActions.map(action => (
+                <ActionCard 
+                  key={action.id} 
+                  action={action} 
+                  onSelect={() => handleSelectAction(action)}
+                  disabled={selectedActions.length >= actionsPerRound}
+                />
+              ))}
+            </div>
+            
+            {/* Selected actions */}
+            {selectedActions.length > 0 && (
+              <div className="mt-6">
+                <h3 className="font-semibold text-lg mb-3">Acciones seleccionadas ({selectedActions.length}/{actionsPerRound})</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedActions.map(action => (
+                    <Badge key={action.id} className="bg-blue-100 text-blue-800 border border-blue-300 px-3 py-1">
+                      {action.title}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CardContent>
+          
+          <CardFooter className="border-t bg-gray-50 flex justify-between">
+            <div className="text-sm text-gray-500">
+              {selectedActions.length} de {actionsPerRound} acciones seleccionadas
+            </div>
+            
+            <Button 
+              onClick={handleNextRound}
+              disabled={selectedActions.length < actionsPerRound}
+              className="bg-gradient-bcp"
+            >
+              {round < totalRounds ? 'Siguiente Ronda' : 'Siguiente Fase'} <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardFooter>
+        </Card>
+      )}
+    </div>
+  );
+};
+
+export default StormGame;

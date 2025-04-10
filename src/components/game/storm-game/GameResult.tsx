@@ -15,7 +15,8 @@ import {
   Lock,
   Check,
   Flag,
-  CheckCircle
+  CheckCircle,
+  Clock
 } from 'lucide-react';
 import GameMetrics from './GameMetrics';
 import { Progress } from '@/components/ui/progress';

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -266,7 +267,8 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
   };
 
   const handleNextRound = () => {
-    if (selectedActions.length < actionsPerRound && phase !== 'result') {
+    // Corregido: Solo validamos las acciones seleccionadas después de la intro
+    if (phase !== 'intro' && selectedActions.length < actionsPerRound && phase !== 'result') {
       toast({
         title: "Acciones pendientes",
         description: `Debes seleccionar ${actionsPerRound} acciones para continuar.`,
@@ -284,12 +286,24 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
       }
     } else {
       if (phase === 'intro') {
+        // Inicializar la fase de preparación con acciones disponibles
         setPhase('preparation');
+        setAvailableActions(preparationActions);
+        setSelectedActions([]);
+        setRound(1);
       } else if (phase === 'preparation') {
         setPhase('crisis');
+        setTotalRounds(3);
+        setRound(1);
+        triggerRandomEvent();
       } else if (phase === 'crisis') {
         setPhase('recovery');
+        setTotalRounds(2);
+        setRound(1);
+        setAvailableActions(recoveryActions);
+        setSelectedActions([]);
       } else if (phase === 'recovery') {
+        setGameScore(calculateScore());
         setPhase('result');
       }
     }
@@ -356,6 +370,15 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
   const isActionSelected = (actionId: string) => {
     return selectedActions.some(action => action.id === actionId);
   };
+
+  // Cuando cambiamos de fase, llenar las acciones disponibles
+  useEffect(() => {
+    if (phase === 'preparation') {
+      setAvailableActions(preparationActions);
+    } else if (phase === 'recovery') {
+      setAvailableActions(recoveryActions);
+    }
+  }, [phase]);
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">

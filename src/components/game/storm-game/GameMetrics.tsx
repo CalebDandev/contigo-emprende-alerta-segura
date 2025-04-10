@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Progress } from '@/components/ui/progress';
-import { InfoCircle } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 interface Metric {
   name: string;

@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import RiskAssessmentForm from '../components/RiskAssessmentForm';
+import EvaluationChatbot from '../components/EvaluationChatbot';
 
 const Evaluacion = () => {
   return (
@@ -32,7 +32,19 @@ const Evaluacion = () => {
             </nav>
           </div>
         </div>
-        <RiskAssessmentForm />
+        
+        <section className="bcp-section bg-gray-50">
+          <div className="bcp-container max-w-4xl">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-bcp-blue mb-4">Evalúa el riesgo de tu negocio</h2>
+              <p className="text-gray-600">
+                Nuestro Cuy BCP te guiará a través de preguntas para evaluar tu negocio y brindarte recomendaciones personalizadas
+              </p>
+            </div>
+            
+            <EvaluationChatbot />
+          </div>
+        </section>
       </main>
       <Footer />
     </div>

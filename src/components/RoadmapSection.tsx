@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { BookOpen, Lock, CheckCircle, Star, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +15,8 @@ const RoadmapSection = () => {
       progress: 75,
       modules: 5,
       timeEstimate: '2 horas',
-      category: 'Fundamentos'
+      category: 'Fundamentos',
+      image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'curso-2',
@@ -23,7 +25,8 @@ const RoadmapSection = () => {
       progress: 30,
       modules: 4,
       timeEstimate: '1.5 horas',
-      category: 'Financiero'
+      category: 'Financiero',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
     }
   ];
   
@@ -66,35 +69,46 @@ const RoadmapSection = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {unlockedCourses.map((course) => (
-              <div key={course.id} className="bg-white rounded-xl shadow-md p-6 flex flex-col h-full">
-                <div className="flex justify-between items-start mb-4">
-                  <Badge className="bg-green-100 text-green-800 border-green-200">
-                    <CheckCircle className="h-3 w-3 mr-1" /> Disponible
-                  </Badge>
-                  <Badge variant="outline" className="bg-blue-50 text-blue-800">
-                    {course.category}
-                  </Badge>
+              <div key={course.id} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-full">
+                <div className="h-48 overflow-hidden">
+                  <img 
+                    src={course.image} 
+                    alt={course.title}
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
                 </div>
-                
-                <h4 className="text-lg font-bold mb-2">{course.title}</h4>
-                <p className="text-gray-600 mb-4 flex-grow">{course.description}</p>
-                
-                <div className="mt-2 mb-4">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Progreso</span>
-                    <span className="font-medium">{course.progress}%</span>
+                <div className="p-6 flex flex-col flex-grow">
+                  <div className="flex justify-between items-start mb-4">
+                    <Badge className="bg-green-100 text-green-800 border-green-200">
+                      <CheckCircle className="h-3 w-3 mr-1" /> Disponible
+                    </Badge>
+                    <Badge variant="outline" className="bg-blue-50 text-blue-800">
+                      {course.category}
+                    </Badge>
                   </div>
-                  <Progress value={course.progress} className="h-2" />
+                  
+                  <h4 className="text-lg font-bold mb-2">{course.title}</h4>
+                  <p className="text-gray-600 mb-4 flex-grow">{course.description}</p>
+                  
+                  <div className="mt-2 mb-4">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Progreso</span>
+                      <span className="font-medium">{course.progress}%</span>
+                    </div>
+                    <Progress value={course.progress} className="h-2" />
+                  </div>
+                  
+                  <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
+                    <span>{course.modules} módulos</span>
+                    <span>Duración: {course.timeEstimate}</span>
+                  </div>
+                  
+                  <Link to={`/curso/${course.id}`}>
+                    <Button className="w-full mt-auto">
+                      {course.progress > 0 ? 'Continuar curso' : 'Comenzar curso'}
+                    </Button>
+                  </Link>
                 </div>
-                
-                <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-                  <span>{course.modules} módulos</span>
-                  <span>Duración: {course.timeEstimate}</span>
-                </div>
-                
-                <Button className="w-full mt-auto">
-                  {course.progress > 0 ? 'Continuar curso' : 'Comenzar curso'}
-                </Button>
               </div>
             ))}
           </div>

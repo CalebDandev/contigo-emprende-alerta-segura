@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, ArrowRight, Check, CloudLightning, Clock, Coins, Heart, LineChart, Shield, Trophy, Users } from 'lucide-react';
+import { AlertCircle, ArrowRight, Check, CloudLightning, Clock, Coins, Heart, LineChart, Shield, Trophy, Users, HelpCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import GameIntro from './GameIntro';
 import ActionCard from './ActionCard';
@@ -49,7 +48,7 @@ interface Event {
 const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
   const [phase, setPhase] = useState<GamePhase>('intro');
   const [round, setRound] = useState(1);
-  const [totalRounds, setTotalRounds] = useState(5); // Changes per phase
+  const [totalRounds, setTotalRounds] = useState(5);
   const [availableActions, setAvailableActions] = useState<Action[]>([]);
   const [selectedActions, setSelectedActions] = useState<Action[]>([]);
   const [metrics, setMetrics] = useState({
@@ -61,56 +60,11 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
   const [actionsPerRound, setActionsPerRound] = useState(2);
   const [gameScore, setGameScore] = useState(0);
   const [achievements, setAchievements] = useState<string[]>([]);
-  
-  // Helper to calculate total score based on metrics
+
   const calculateScore = () => {
     return Math.round((metrics.economy + metrics.trust + metrics.morale) / 3);
   };
-  
-  // Prepare action lists
-  useEffect(() => {
-    // Reset game state when phase changes
-    if (phase === 'preparation') {
-      setRound(1);
-      setTotalRounds(5);
-      setActionsPerRound(2);
-      setAvailableActions(preparationActions);
-      setSelectedActions([]);
-    } else if (phase === 'crisis') {
-      setRound(1);
-      setTotalRounds(3);
-      setActionsPerRound(1);
-      triggerRandomEvent();
-    } else if (phase === 'recovery') {
-      setRound(1);
-      setTotalRounds(2);
-      setActionsPerRound(2);
-      setAvailableActions(recoveryActions);
-      setSelectedActions([]);
-    } else if (phase === 'result') {
-      const finalScore = calculateScore();
-      setGameScore(finalScore);
-      
-      // Determine achievements based on final metrics
-      const newAchievements = [];
-      
-      if (metrics.economy >= 80) newAchievements.push("Gestor Financiero");
-      if (metrics.trust >= 80) newAchievements.push("Líder Confiable");
-      if (metrics.morale >= 80) newAchievements.push("Motivador del Equipo");
-      if (finalScore >= 85) newAchievements.push("Capitán Resiliente");
-      if (metrics.economy >= 90 && metrics.trust >= 90 && metrics.morale >= 90) {
-        newAchievements.push("Emprendedor de Hierro");
-      }
-      
-      setAchievements(newAchievements);
-      
-      // Apply final score as earned coins
-      const earnedCoins = Math.max(10, Math.round(finalScore / 2));
-      setTimeout(() => onComplete(earnedCoins), 500);
-    }
-  }, [phase]);
-  
-  // Actions that can be taken during preparation phase
+
   const preparationActions: Action[] = [
     {
       id: "prep1",
@@ -161,8 +115,7 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
       icon: <Shield className="h-8 w-8 text-blue-500" />
     },
   ];
-  
-  // Actions that can be taken during recovery phase
+
   const recoveryActions: Action[] = [
     {
       id: "rec1",
@@ -197,8 +150,7 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
       icon: <Trophy className="h-8 w-8 text-green-500" />
     },
   ];
-  
-  // Possible crisis events
+
   const crisisEvents: Event[] = [
     {
       id: "crisis1",
@@ -237,20 +189,16 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
     },
   ];
 
-  // Trigger a random crisis event
   const triggerRandomEvent = () => {
     const randomIndex = Math.floor(Math.random() * crisisEvents.length);
     setCurrentEvent(crisisEvents[randomIndex]);
     
-    // Generate response options based on previous preparations
     const eventResponses = generateEventResponses(crisisEvents[randomIndex]);
     setAvailableActions(eventResponses);
     setSelectedActions([]);
   };
 
-  // Generate response options based on event and previous preparations
   const generateEventResponses = (event: Event): Action[] => {
-    // Basic responses always available
     const basicResponses: Action[] = [
       {
         id: `response-basic-${event.category}`,
@@ -262,11 +210,9 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
       }
     ];
     
-    // Check if user had prepared for this type of crisis
     const hasPrepared = selectedActions.some(action => action.category === event.category);
     
     if (hasPrepared) {
-      // Add enhanced response options if they prepared
       basicResponses.push({
         id: `response-prepared-${event.category}`,
         title: "Respuesta Preparada",
@@ -277,7 +223,6 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
       });
     }
     
-    // Add one more option that's always available but with varying effectiveness
     basicResponses.push({
       id: `response-creative-${event.category}`,
       title: "Solución Creativa",
@@ -294,7 +239,6 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
     return basicResponses;
   };
 
-  // Handle action selection
   const handleSelectAction = (action: Action) => {
     if (selectedActions.length >= actionsPerRound) {
       toast({
@@ -305,17 +249,14 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
       return;
     }
     
-    // Add action to selected
     setSelectedActions(prev => [...prev, action]);
     
-    // Apply impacts to metrics
     setMetrics(prev => ({
       economy: Math.max(0, Math.min(100, prev.economy + action.impact.economy)),
       trust: Math.max(0, Math.min(100, prev.trust + action.impact.trust)),
       morale: Math.max(0, Math.min(100, prev.morale + action.impact.morale)),
     }));
     
-    // Remove from available actions to prevent reselection
     setAvailableActions(prev => prev.filter(a => a.id !== action.id));
     
     toast({
@@ -324,7 +265,6 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
     });
   };
 
-  // Progress to next round or phase
   const handleNextRound = () => {
     if (selectedActions.length < actionsPerRound && phase !== 'result') {
       toast({
@@ -336,16 +276,13 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
     }
     
     if (round < totalRounds) {
-      // Move to next round in current phase
       setRound(prev => prev + 1);
       setSelectedActions([]);
       
       if (phase === 'crisis') {
-        // New event for each crisis round
         triggerRandomEvent();
       }
     } else {
-      // Move to next phase
       if (phase === 'intro') {
         setPhase('preparation');
       } else if (phase === 'preparation') {
@@ -358,7 +295,6 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
     }
   };
 
-  // Game phase title and description
   const getPhaseInfo = () => {
     switch (phase) {
       case 'intro':
@@ -396,7 +332,6 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
 
   const phaseInfo = getPhaseInfo();
 
-  // Format metrics for display
   const formattedMetrics = [
     {
       name: "Economía",
@@ -417,6 +352,10 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
       color: "bg-green-500"
     }
   ];
+
+  const isActionSelected = (actionId: string) => {
+    return selectedActions.some(action => action.id === actionId);
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
@@ -461,14 +400,30 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
           </CardHeader>
           
           <CardContent className="pt-6">
-            {/* Game metrics */}
-            <GameMetrics metrics={formattedMetrics} />
+            <GameMetrics metrics={formattedMetrics} showDescription={true} />
             
-            <h3 className="font-semibold text-lg mt-6 mb-3">
-              {phase === 'preparation' ? 'Acciones de preparación disponibles' : 
-               phase === 'crisis' ? `Respuesta a: ${currentEvent?.title}` :
-               'Acciones de recuperación disponibles'}
-            </h3>
+            <div className="flex justify-between items-center mt-6 mb-3">
+              <h3 className="font-semibold text-lg">
+                {phase === 'preparation' ? 'Acciones de preparación disponibles' : 
+                 phase === 'crisis' ? `Respuesta a: ${currentEvent?.title}` :
+                 'Acciones de recuperación disponibles'}
+              </h3>
+              
+              <div className="flex items-center text-sm text-gray-600 bg-blue-50 px-3 py-1 rounded-full">
+                <HelpCircle className="h-4 w-4 mr-1 text-blue-500" />
+                Selecciona {actionsPerRound} acciones
+              </div>
+            </div>
+            
+            <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 mb-4">
+              <div className="flex items-start">
+                <AlertCircle className="h-5 w-5 text-amber-500 mr-2 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-amber-800">
+                  Debes seleccionar <strong>{actionsPerRound} acciones</strong> en esta ronda. 
+                  Cada acción afectará tus métricas de Economía, Confianza y Moral.
+                </p>
+              </div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {availableActions.map(action => (
@@ -477,34 +432,52 @@ const StormGame: React.FC<StormGameProps> = ({ onComplete, onClose }) => {
                   action={action} 
                   onSelect={() => handleSelectAction(action)}
                   disabled={selectedActions.length >= actionsPerRound}
+                  isSelected={false}
+                />
+              ))}
+              {selectedActions.length > 0 && selectedActions.map(action => (
+                <ActionCard 
+                  key={action.id} 
+                  action={action} 
+                  onSelect={() => {/* Already selected */}}
+                  disabled={false}
+                  isSelected={true}
                 />
               ))}
             </div>
             
-            {/* Selected actions */}
-            {selectedActions.length > 0 && (
-              <div className="mt-6">
-                <h3 className="font-semibold text-lg mb-3">Acciones seleccionadas ({selectedActions.length}/{actionsPerRound})</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedActions.map(action => (
-                    <Badge key={action.id} className="bg-blue-100 text-blue-800 border border-blue-300 px-3 py-1">
-                      {action.title}
-                    </Badge>
-                  ))}
+            <div className="mt-6 bg-gray-50 rounded-lg p-4">
+              <h3 className="font-semibold text-lg mb-2">Progreso de selección</h3>
+              <div className="flex items-center">
+                <div className="flex-grow mr-4">
+                  <Progress 
+                    value={(selectedActions.length / actionsPerRound) * 100} 
+                    className="h-3"
+                    indicatorClassName="bg-bcp-blue"
+                  />
+                </div>
+                <div className="text-sm font-medium">
+                  {selectedActions.length} de {actionsPerRound} acciones
                 </div>
               </div>
-            )}
+            </div>
           </CardContent>
           
           <CardFooter className="border-t bg-gray-50 flex justify-between">
-            <div className="text-sm text-gray-500">
-              {selectedActions.length} de {actionsPerRound} acciones seleccionadas
+            <div className="text-sm text-gray-500 flex items-center">
+              <span className={`mr-1 font-medium ${selectedActions.length < actionsPerRound ? 'text-amber-600' : 'text-green-600'}`}>
+                {selectedActions.length}
+              </span> 
+              de {actionsPerRound} acciones seleccionadas
+              {selectedActions.length < actionsPerRound && (
+                <AlertCircle className="h-4 w-4 text-amber-500 ml-1" />
+              )}
             </div>
             
             <Button 
               onClick={handleNextRound}
               disabled={selectedActions.length < actionsPerRound}
-              className="bg-gradient-bcp"
+              className={`bg-gradient-bcp ${selectedActions.length < actionsPerRound ? 'opacity-70' : ''}`}
             >
               {round < totalRounds ? 'Siguiente Ronda' : 'Siguiente Fase'} <ArrowRight className="ml-2 h-4 w-4" />
             </Button>

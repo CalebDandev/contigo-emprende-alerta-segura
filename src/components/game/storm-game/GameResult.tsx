@@ -10,9 +10,17 @@ import {
   ThumbsUp,
   Award,
   ShieldCheck,
-  Star
+  Star,
+  BookOpen,
+  Lock,
+  Check,
+  Flag,
+  CheckCircle
 } from 'lucide-react';
 import GameMetrics from './GameMetrics';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { toast } from '@/hooks/use-toast';
 
 interface GameResultProps {
   metrics: {
@@ -27,6 +35,7 @@ interface GameResultProps {
 
 const GameResult: React.FC<GameResultProps> = ({ metrics, score, achievements, onClose }) => {
   const [showingCertificate, setShowingCertificate] = useState(false);
+  const [activeTab, setActiveTab] = useState<'resumen' | 'cursos' | 'misiones'>('resumen');
   
   // Get feedback based on score
   const getFeedback = () => {
@@ -74,6 +83,81 @@ const GameResult: React.FC<GameResultProps> = ({ metrics, score, achievements, o
       value: metrics.morale,
       icon: <Award className="h-4 w-4" />,
       color: "bg-green-500"
+    }
+  ];
+
+  // Desbloqueados según el puntaje
+  const earnedCoins = Math.max(10, Math.round(score / 2));
+  
+  // Cursos recomendados (desbloqueados y bloqueados)
+  const courses = [
+    {
+      id: "curso1",
+      title: "Finanzas para Emergencias",
+      description: "Aprende a construir un colchón financiero para tu negocio.",
+      level: "Básico",
+      duration: "45 min",
+      unlocked: score >= 60,
+      icon: <BookOpen className="h-5 w-5" />,
+      cost: 25
+    },
+    {
+      id: "curso2",
+      title: "Comunicación en Crisis",
+      description: "Estrategias para mantener informados a clientes y equipo ante emergencias.",
+      level: "Intermedio",
+      duration: "60 min",
+      unlocked: score >= 70,
+      icon: <BookOpen className="h-5 w-5" />,
+      cost: 35
+    },
+    {
+      id: "curso3",
+      title: "Liderazgo Resiliente",
+      description: "Técnicas para mantener alta la moral del equipo en tiempos difíciles.",
+      level: "Avanzado",
+      duration: "90 min",
+      unlocked: score >= 80,
+      icon: <BookOpen className="h-5 w-5" />,
+      cost: 50
+    },
+    {
+      id: "curso4",
+      title: "Reactivación Post-Crisis",
+      description: "Cómo recuperar tu negocio después de un evento crítico.",
+      level: "Intermedio",
+      duration: "75 min",
+      unlocked: false,
+      icon: <BookOpen className="h-5 w-5" />,
+      cost: 40
+    }
+  ];
+  
+  // Misiones disponibles
+  const missions = [
+    {
+      id: "mission1",
+      title: "Completa tu plan de contingencia",
+      description: "Crea un documento con los pasos a seguir ante una crisis.",
+      reward: 15,
+      completed: false,
+      deadline: "2 días"
+    },
+    {
+      id: "mission2",
+      title: "Comparte tu experiencia",
+      description: "Comparte tu certificado en redes sociales.",
+      reward: 10,
+      completed: false,
+      deadline: "5 días"
+    },
+    {
+      id: "mission3",
+      title: "Entrena a tu equipo",
+      description: "Invita a 2 miembros de tu equipo a jugar este desafío.",
+      reward: 20,
+      completed: false,
+      deadline: "7 días"
     }
   ];
 
@@ -133,6 +217,20 @@ const GameResult: React.FC<GameResultProps> = ({ metrics, score, achievements, o
     );
   };
 
+  const handleViewCourse = (courseId: string) => {
+    toast({
+      title: "Accediendo al curso",
+      description: "Esta función estará disponible próximamente"
+    });
+  };
+  
+  const handleTakeMission = (missionId: string) => {
+    toast({
+      title: "Misión aceptada",
+      description: "La misión ha sido añadida a tu lista de pendientes"
+    });
+  };
+
   return (
     <>
       {showingCertificate && renderCertificate()}
@@ -163,46 +261,222 @@ const GameResult: React.FC<GameResultProps> = ({ metrics, score, achievements, o
           </div>
         </CardHeader>
         
-        <CardContent className="p-6">
-          <div className="bg-gray-50 rounded-lg p-5 mb-6">
-            <h3 className="font-semibold mb-3">{feedback.title}</h3>
-            <p className="text-gray-600">{feedback.message}</p>
+        <div className="bg-white border-b">
+          <div className="flex">
+            <button 
+              className={`py-3 px-4 text-sm font-medium ${activeTab === 'resumen' ? 'border-b-2 border-bcp-blue text-bcp-blue' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('resumen')}
+            >
+              Resultados
+            </button>
+            <button 
+              className={`py-3 px-4 text-sm font-medium ${activeTab === 'cursos' ? 'border-b-2 border-bcp-blue text-bcp-blue' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('cursos')}
+            >
+              Cursos Recomendados
+            </button>
+            <button 
+              className={`py-3 px-4 text-sm font-medium ${activeTab === 'misiones' ? 'border-b-2 border-bcp-blue text-bcp-blue' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('misiones')}
+            >
+              Misiones
+            </button>
           </div>
-          
-          <h3 className="font-semibold mb-3">Resultados finales</h3>
-          <GameMetrics metrics={formattedMetrics} />
-          
-          {achievements.length > 0 && (
-            <div className="mt-6">
-              <h3 className="font-semibold mb-3">Logros desbloqueados</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {achievements.map((achievement, index) => (
-                  <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center">
-                    <div className="bg-gradient-bcp rounded-full p-2 mr-3">
-                      <Award className="h-5 w-5 text-white" />
-                    </div>
-                    <span className="font-medium text-sm">{achievement}</span>
-                  </div>
-                ))}
+        </div>
+        
+        <CardContent className="p-6">
+          {activeTab === 'resumen' && (
+            <>
+              <div className="flex items-center justify-between mb-6 bg-gradient-to-r from-amber-50 to-amber-100 p-4 rounded-lg border border-amber-200">
+                <div>
+                  <h3 className="font-semibold flex items-center text-amber-700">
+                    <Flag className="h-5 w-5 mr-2" />
+                    Soles de Resiliencia ganados
+                  </h3>
+                  <p className="text-sm text-amber-600">
+                    ¡Felicidades! Has ganado monedas para desbloquear recursos especiales.
+                  </p>
+                </div>
+                <div className="text-3xl font-bold text-amber-600">+{earnedCoins}</div>
               </div>
-            </div>
+              
+              <div className="bg-gray-50 rounded-lg p-5 mb-6">
+                <h3 className="font-semibold mb-3">{feedback.title}</h3>
+                <p className="text-gray-600">{feedback.message}</p>
+              </div>
+              
+              <h3 className="font-semibold mb-3">Resultados finales</h3>
+              <GameMetrics metrics={formattedMetrics} showDescription={true} />
+              
+              {achievements.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="font-semibold mb-3">Logros desbloqueados</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {achievements.map((achievement, index) => (
+                      <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center">
+                        <div className="bg-gradient-bcp rounded-full p-2 mr-3">
+                          <Award className="h-5 w-5 text-white" />
+                        </div>
+                        <span className="font-medium text-sm">{achievement}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h3 className="font-semibold flex items-center text-bcp-blue mb-2">
+                  <Rocket className="h-5 w-5 mr-2" />
+                  ¿Qué aprendiste?
+                </h3>
+                <p className="text-sm text-gray-600 mb-3">
+                  Este desafío representa situaciones que pueden afectar a cualquier negocio. La preparación
+                  anticipada, la capacidad de respuesta y las estrategias de recuperación son clave para
+                  construir un negocio resiliente.
+                </p>
+                <p className="text-sm text-gray-600">
+                  En BCP Contigo Emprendedor encontrarás recursos para fortalecer cada aspecto de tu negocio
+                  y prepararte para escenarios inesperados.
+                </p>
+              </div>
+            </>
           )}
           
-          <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="font-semibold flex items-center text-bcp-blue mb-2">
-              <Rocket className="h-5 w-5 mr-2" />
-              ¿Qué aprendiste?
-            </h3>
-            <p className="text-sm text-gray-600 mb-3">
-              Este desafío representa situaciones que pueden afectar a cualquier negocio. La preparación
-              anticipada, la capacidad de respuesta y las estrategias de recuperación son clave para
-              construir un negocio resiliente.
-            </p>
-            <p className="text-sm text-gray-600">
-              En BCP Contigo Emprendedor encontrarás recursos para fortalecer cada aspecto de tu negocio
-              y prepararte para escenarios inesperados.
-            </p>
-          </div>
+          {activeTab === 'cursos' && (
+            <>
+              <div className="bg-gray-50 rounded-lg p-5 mb-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold">Roadmap de Aprendizaje</h3>
+                  <div className="flex items-center text-sm">
+                    <div className="flex items-center mr-3">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-1"></div>
+                      <span>Desbloqueado</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-gray-300 rounded-full mr-1"></div>
+                      <span>Bloqueado</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="relative">
+                  <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                  
+                  {courses.map((course, index) => (
+                    <div key={course.id} className="relative mb-4 last:mb-0">
+                      <div className="flex items-start ml-4 pl-6">
+                        <div className={`absolute left-0 w-8 h-8 rounded-full flex items-center justify-center ${course.unlocked ? 'bg-green-500' : 'bg-gray-300'}`}>
+                          {course.unlocked ? (
+                            <Check className="h-4 w-4 text-white" />
+                          ) : (
+                            <Lock className="h-4 w-4 text-white" />
+                          )}
+                        </div>
+                        
+                        <div className={`flex-grow p-4 rounded-lg border ${course.unlocked ? 'bg-white border-green-200' : 'bg-gray-50 border-gray-200'}`}>
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-medium">{course.title}</h4>
+                            <Badge variant="outline" className={course.unlocked ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}>
+                              {course.level}
+                            </Badge>
+                          </div>
+                          
+                          <p className="text-sm text-gray-600 mb-3">{course.description}</p>
+                          
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center text-xs text-gray-500">
+                              <BookOpen className="h-4 w-4 mr-1" />
+                              {course.duration}
+                            </div>
+                            
+                            {course.unlocked ? (
+                              <Button size="sm" className="bg-gradient-bcp text-white" onClick={() => handleViewCourse(course.id)}>
+                                Ver curso
+                              </Button>
+                            ) : (
+                              <div className="flex items-center text-sm text-amber-600 font-medium">
+                                <Flag className="h-4 w-4 mr-1" />
+                                {course.cost} Soles
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h3 className="font-semibold text-bcp-blue mb-2">
+                  ¿Cómo desbloquear más cursos?
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Completa desafíos, mantén una racha diaria de aprendizaje y gana más 
+                  Soles de Resiliencia para acceder a todos los recursos del programa.
+                </p>
+              </div>
+            </>
+          )}
+          
+          {activeTab === 'misiones' && (
+            <>
+              <div className="bg-gray-50 rounded-lg p-5 mb-6">
+                <h3 className="font-semibold mb-4">Misiones Disponibles</h3>
+                
+                <div className="space-y-4">
+                  {missions.map(mission => (
+                    <div key={mission.id} className="bg-white border rounded-lg p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-grow">
+                          <h4 className="font-medium mb-1">{mission.title}</h4>
+                          <p className="text-sm text-gray-600 mb-3">{mission.description}</p>
+                          
+                          <div className="flex items-center text-xs text-gray-500">
+                            <div className="flex items-center mr-4">
+                              <Flag className="h-4 w-4 text-amber-500 mr-1" />
+                              <span>{mission.reward} Soles</span>
+                            </div>
+                            <div className="flex items-center">
+                              <Clock className="h-4 w-4 mr-1 text-blue-500" />
+                              <span>Expira en: {mission.deadline}</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <Button 
+                          size="sm"
+                          variant="outline"
+                          className="border-bcp-blue text-bcp-blue"
+                          onClick={() => handleTakeMission(mission.id)}
+                        >
+                          Aceptar misión
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-bcp-blue mb-1">¡Completa misiones diarias!</h3>
+                    <p className="text-sm text-gray-600">
+                      Mantén tu racha de aprendizaje y gana bonificaciones especiales.
+                    </p>
+                  </div>
+                  <div className="flex items-center bg-white px-3 py-2 rounded-lg shadow-sm">
+                    <div className="text-2xl font-bold text-bcp-blue mr-2">3</div>
+                    <div className="text-xs text-gray-500">
+                      <div>Racha actual</div>
+                      <div>días</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </CardContent>
         
         <CardFooter className="bg-gray-50 p-5 flex flex-col sm:flex-row gap-3 justify-between">

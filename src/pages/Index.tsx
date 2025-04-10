@@ -8,6 +8,10 @@ import Resources from '../components/Resources';
 import Testimonials from '../components/Testimonials';
 import CTA from '../components/CTA';
 import Footer from '../components/Footer';
+import PracticalChallenges from '../components/PracticalChallenges';
+import MentorshipSection from '../components/MentorshipSection';
+import RoadmapSection from '../components/RoadmapSection';
+import ChatbotAssistant from '../components/ChatbotAssistant';
 
 const Index = () => {
   return (
@@ -15,12 +19,16 @@ const Index = () => {
       <Header />
       <main className="flex-grow">
         <Hero />
+        <PracticalChallenges />
+        <RoadmapSection />
+        <MentorshipSection />
         <Features />
         <HowItWorks />
         <Resources />
         <Testimonials />
         <CTA />
       </main>
+      <ChatbotAssistant />
       <Footer />
     </div>
   );

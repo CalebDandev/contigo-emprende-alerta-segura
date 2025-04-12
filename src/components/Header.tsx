@@ -1,7 +1,18 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronDown, Search, User } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, User, BookOpen, Shield, Award, Users } from 'lucide-react';
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle
+} from '@/components/ui/navigation-menu';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,27 +50,80 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <div className="group relative">
-              <button className="flex items-center text-gray-700 hover:text-bcp-blue">
-                Productos <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-            </div>
-            <div className="group relative">
-              <button className="flex items-center text-gray-700 hover:text-bcp-blue">
-                Soluciones Digitales <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-            </div>
-            <div className="group relative">
-              <button className="flex items-center text-gray-700 hover:text-bcp-blue">
-                Beneficios <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-            </div>
-            <div className="group relative">
-              <button className="flex items-center text-gray-700 hover:text-bcp-blue">
-                Ayuda y Educación <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-            </div>
+          <nav className="hidden lg:flex items-center space-x-4">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="bg-transparent">Aprendizaje</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/evaluacion" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center gap-2">
+                              <Shield className="h-5 w-5 text-bcp-blue" />
+                              <div className="text-sm font-medium leading-none">Evaluación</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Evalúa la resiliencia de tu negocio con nuestro asistente virtual
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/plan" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center gap-2">
+                              <BookOpen className="h-5 w-5 text-bcp-blue" />
+                              <div className="text-sm font-medium leading-none">Cursos</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Accede a cursos especializados para fortalecer tu negocio
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/recursos" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center gap-2">
+                              <Award className="h-5 w-5 text-bcp-blue" />
+                              <div className="text-sm font-medium leading-none">Recursos</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Plantillas, guías y herramientas para situaciones de crisis
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/proyectos" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center gap-2">
+                              <Users className="h-5 w-5 text-bcp-blue" />
+                              <div className="text-sm font-medium leading-none">Proyectos</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Comunidad de proyectos prácticos con mentores asignados
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link to="/evaluacion" className={cn(navigationMenuTriggerStyle(), "bg-transparent")}>
+                    Evaluar mi negocio
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link to="/plan" className={cn(navigationMenuTriggerStyle(), "bg-transparent")}>
+                    Mi Plan
+                  </Link>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
             <button className="flex items-center text-gray-700 hover:text-bcp-blue">
               <Search className="h-5 w-5" />
               <span className="ml-1">Buscar</span>
@@ -70,7 +134,7 @@ const Header = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <Link to="/login" className="flex items-center border border-gray-300 rounded-full px-4 py-2 hover:border-bcp-blue transition-colors">
               <User className="h-5 w-5 mr-2" />
-              <span>Abrir cuenta</span>
+              <span>Mi cuenta</span>
             </Link>
             <Link to="/internet-banking" className="bcp-button-primary">
               Banca por Internet
@@ -94,12 +158,24 @@ const Header = () => {
         {/* Mobile Navigation */}
         <div className={`lg:hidden ${isMenuOpen ? 'block' : 'hidden'} py-4`}>
           <nav className="flex flex-col space-y-4">
-            <Link to="/" className="px-4 py-2 hover:bg-gray-100 rounded">Productos</Link>
-            <Link to="/" className="px-4 py-2 hover:bg-gray-100 rounded">Soluciones Digitales</Link>
-            <Link to="/" className="px-4 py-2 hover:bg-gray-100 rounded">Beneficios</Link>
-            <Link to="/" className="px-4 py-2 hover:bg-gray-100 rounded">Ayuda y Educación</Link>
+            <Link to="/evaluacion" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
+              <Shield className="h-5 w-5 mr-2 text-bcp-blue" />
+              Evaluar mi negocio
+            </Link>
+            <Link to="/plan" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
+              <BookOpen className="h-5 w-5 mr-2 text-bcp-blue" />
+              Cursos
+            </Link>
+            <Link to="/recursos" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
+              <Award className="h-5 w-5 mr-2 text-bcp-blue" />
+              Recursos
+            </Link>
+            <Link to="/proyectos" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
+              <Users className="h-5 w-5 mr-2 text-bcp-blue" />
+              Proyectos
+            </Link>
             <div className="pt-2 border-t border-gray-200 mt-2">
-              <Link to="/login" className="block px-4 py-2 hover:bg-gray-100 rounded">Abrir cuenta</Link>
+              <Link to="/login" className="block px-4 py-2 hover:bg-gray-100 rounded">Mi cuenta</Link>
               <Link to="/internet-banking" className="block px-4 py-2 text-bcp-orange font-medium">Banca por Internet</Link>
             </div>
           </nav>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Lock, CheckCircle, Star, ArrowRight } from 'lucide-react';
+import { BookOpen, Lock, CheckCircle, Star, ArrowRight, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -16,7 +16,8 @@ const RoadmapSection = () => {
       modules: 5,
       timeEstimate: '2 horas',
       category: 'Fundamentos',
-      image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+      image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      videoThumbnail: 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'curso-2',
@@ -26,7 +27,8 @@ const RoadmapSection = () => {
       modules: 4,
       timeEstimate: '1.5 horas',
       category: 'Financiero',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      videoThumbnail: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
     }
   ];
   
@@ -53,7 +55,7 @@ const RoadmapSection = () => {
 
   return (
     <section className="bcp-section bg-gray-50 py-16">
-      <div className="bcp-container">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">Ruta de Aprendizaje</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -70,12 +72,21 @@ const RoadmapSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {unlockedCourses.map((course) => (
               <div key={course.id} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-full">
-                <div className="h-48 overflow-hidden">
+                <div className="h-48 overflow-hidden relative">
                   <img 
                     src={course.image} 
                     alt={course.title}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                    <Link 
+                      to={`/curso/${course.id}#video`} 
+                      className="bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors flex items-center text-sm font-medium text-bcp-blue"
+                    >
+                      <Play className="h-4 w-4 mr-1" fill="currentColor" />
+                      Ver introducción
+                    </Link>
+                  </div>
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-start mb-4">

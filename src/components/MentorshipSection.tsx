@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Users, Star, Award, Calendar, MessageCircle, Clock } from 'lucide-react';
+import { Users, Star, Award, Calendar, MessageCircle, Clock, UserCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -41,11 +41,11 @@ const MentorshipSection = () => {
 
   return (
     <section className="bcp-section bg-white py-16">
-      <div className="bcp-container">
+      <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">Mentoría y Voluntariado</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">Mentoría y Proyectos</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Conéctate con otros emprendedores experimentados que comparten sus conocimientos. También puedes convertirte en mentor y ayudar a otros.
+            Recibe orientación de emprendedores experimentados y aplica lo aprendido en proyectos prácticos que fortalecerán tu negocio.
           </p>
         </div>
         
@@ -87,7 +87,7 @@ const MentorshipSection = () => {
               
               <div className="mt-auto space-y-2">
                 <Button className="w-full bg-gradient-bcp">
-                  <MessageCircle className="h-4 w-4 mr-2" /> Solicitar mentoría
+                  <MessageCircle className="h-4 w-4 mr-2" /> Ver proyectos disponibles
                 </Button>
                 <Button variant="outline" className="w-full border-gray-300">
                   <Calendar className="h-4 w-4 mr-2" /> Ver disponibilidad
@@ -100,21 +100,21 @@ const MentorshipSection = () => {
         <div className="bg-blue-50 rounded-lg p-8 border border-blue-100">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="mb-6 md:mb-0 md:mr-8">
-              <h3 className="text-xl font-bold mb-3">¿Quieres convertirte en mentor?</h3>
+              <h3 className="text-xl font-bold mb-3">¿Quieres iniciar un proyecto práctico?</h3>
               <p className="text-gray-700">
-                Comparte tu experiencia con otros emprendedores y obtén certificados de mentoría que puedes añadir a tu perfil profesional.
+                Aplica lo aprendido en proyectos reales bajo la guía de un mentor asignado por BCP. Gana Soles de Resiliencia al completar tus proyectos.
               </p>
               <div className="flex items-center mt-4">
                 <Badge className="mr-2 bg-green-100 text-green-800">
-                  <Award className="h-3 w-3 mr-1" /> Certificado oficial
+                  <Award className="h-3 w-3 mr-1" /> Soles de Resiliencia
                 </Badge>
                 <Badge className="bg-purple-100 text-purple-800">
-                  <Star className="h-3 w-3 mr-1" /> Beneficios exclusivos
+                  <UserCheck className="h-3 w-3 mr-1" /> Mentor asignado
                 </Badge>
               </div>
             </div>
             <Button size="lg" className="whitespace-nowrap">
-              <Users className="h-4 w-4 mr-2" /> Unirse como mentor
+              <Users className="h-4 w-4 mr-2" /> Solicitar un proyecto
             </Button>
           </div>
         </div>

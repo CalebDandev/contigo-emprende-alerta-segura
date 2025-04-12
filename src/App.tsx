@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Evaluacion from "./pages/Evaluacion";
 import Plan from "./pages/Plan";
 import Recursos from "./pages/Recursos";
+import Proyectos from "./pages/Proyectos";
 import Gamificacion from "./pages/Gamificacion";
 import NotFound from "./pages/NotFound";
 import CourseView from "./pages/CourseView";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/evaluacion" element={<Evaluacion />} />
           <Route path="/plan" element={<Plan />} />
           <Route path="/recursos" element={<Recursos />} />
+          <Route path="/proyectos" element={<Proyectos />} />
           <Route path="/gamificacion" element={<Gamificacion />} />
           <Route path="/curso/:courseId" element={<CourseView />} />
           <Route path="*" element={<NotFound />} />

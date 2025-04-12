@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, ArrowRight, AlertCircle, Clock } from 'lucide-react';
+import { Shield, ArrowRight, AlertCircle, Clock, BookOpen, Users } from 'lucide-react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import CTA from '../components/CTA';

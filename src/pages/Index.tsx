@@ -1,18 +1,11 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, BookOpen, Users, ArrowRight } from 'lucide-react';
+import { Shield, ArrowRight, AlertCircle, Clock } from 'lucide-react';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
-import Features from '../components/Features';
-import HowItWorks from '../components/HowItWorks';
-import Resources from '../components/Resources';
-import Testimonials from '../components/Testimonials';
 import CTA from '../components/CTA';
 import Footer from '../components/Footer';
-import PracticalChallenges from '../components/PracticalChallenges';
-import RoadmapSection from '../components/RoadmapSection';
-import MentorshipSection from '../components/MentorshipSection';
 import ChatbotAssistant from '../components/ChatbotAssistant';
 
 const Index = () => {
@@ -21,54 +14,111 @@ const Index = () => {
       <Header />
       <main className="flex-grow">
         <Hero />
-        <section className="py-12 bg-gray-50">
+        
+        {/* Emprendedor Story Section */}
+        <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">Alerta Segura: Tu aliado ante emergencias</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Una plataforma integral diseñada para emprendedores que desean fortalecer la resiliencia de sus negocios.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-bcp-blue" />
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-6 text-center">La historia de María</h2>
+              
+              <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
+                <div className="flex flex-col md:flex-row gap-6 items-center mb-6">
+                  <div className="w-full md:w-1/3">
+                    <img 
+                      src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" 
+                      alt="María en su tienda" 
+                      className="rounded-lg w-full h-auto"
+                    />
+                  </div>
+                  <div className="w-full md:w-2/3">
+                    <p className="text-lg text-gray-700 mb-4">
+                      María tenía una pequeña bodega en Cañete que era su único sustento familiar. En marzo de 2023, las intensas lluvias 
+                      inundaron su negocio, destruyendo su inventario y equipamiento.
+                    </p>
+                    <p className="text-lg text-gray-700 mb-4">
+                      "Nunca imaginé que esto podría pasar. Lo perdí todo en un día y no sabía cómo recuperarme", cuenta María.
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Evaluación</h3>
-                <p className="text-gray-600 mb-4">Conoce el nivel de preparación de tu negocio ante emergencias.</p>
-                <Link to="/evaluacion" className="text-bcp-blue font-medium hover:underline flex items-center">
-                  Iniciar evaluación <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                
+                <div className="bg-blue-50 p-6 rounded-lg mb-6">
+                  <h3 className="font-bold text-xl text-bcp-blue mb-3">Todo cambió cuando descubrió Alerta Segura</h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <Shield className="h-5 w-5 text-bcp-blue mr-2 mt-1" />
+                      <span>Aprendió a identificar riesgos específicos para su tipo de negocio</span>
+                    </li>
+                    <li className="flex items-start">
+                      <AlertCircle className="h-5 w-5 text-bcp-orange mr-2 mt-1" />
+                      <span>Creó un plan de acción para situaciones de emergencia</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Clock className="h-5 w-5 text-bcp-success mr-2 mt-1" />
+                      <span>Se preparó con recursos y estrategias de recuperación</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <p className="text-lg text-gray-700 font-medium">
+                  "Hoy mi negocio está protegido. Saber que estoy preparada me da tranquilidad para 
+                  seguir creciendo", afirma María con confianza.
+                </p>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                  <BookOpen className="h-6 w-6 text-bcp-blue" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Aprendizaje</h3>
-                <p className="text-gray-600 mb-4">Accede a cursos especializados para fortalecer la resiliencia de tu negocio.</p>
-                <Link to="/plan" className="text-bcp-blue font-medium hover:underline flex items-center">
-                  Ver cursos <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-bcp-blue" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Proyectos</h3>
-                <p className="text-gray-600 mb-4">Participa en proyectos prácticos con la guía de mentores asignados.</p>
-                <Link to="/proyectos" className="text-bcp-blue font-medium hover:underline flex items-center">
-                  Explorar proyectos <ArrowRight className="ml-2 h-4 w-4" />
+              
+              <div className="text-center">
+                <Link to="/evaluacion" className="bcp-button-primary inline-flex items-center">
+                  ¿Está tu negocio preparado? Evalúalo ahora
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </div>
             </div>
           </div>
         </section>
-        <PracticalChallenges />
-        <RoadmapSection />
-        <MentorshipSection />
-        <Features />
-        <Resources />
-        <Testimonials />
+        
+        {/* Why Alerta Segura Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">¿Por qué Alerta Segura?</h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Una solución integral para proteger tu negocio antes, durante y después de una emergencia
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 text-center">
+                <div className="inline-flex h-16 w-16 rounded-full bg-blue-100 items-center justify-center mb-4">
+                  <Shield className="h-8 w-8 text-bcp-blue" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Evaluación personalizada</h3>
+                <p className="text-gray-700">
+                  Identifica los riesgos específicos para tu tipo de negocio con nuestra herramienta de evaluación
+                </p>
+              </div>
+              
+              <div className="bg-orange-50 p-6 rounded-xl border border-orange-100 text-center">
+                <div className="inline-flex h-16 w-16 rounded-full bg-orange-100 items-center justify-center mb-4">
+                  <BookOpen className="h-8 w-8 text-bcp-orange" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Aprendizaje práctico</h3>
+                <p className="text-gray-700">
+                  Cursos diseñados especialmente para emprendedores con ejemplos prácticos y aplicables
+                </p>
+              </div>
+              
+              <div className="bg-green-50 p-6 rounded-xl border border-green-100 text-center">
+                <div className="inline-flex h-16 w-16 rounded-full bg-green-100 items-center justify-center mb-4">
+                  <Users className="h-8 w-8 text-green-600" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Comunidad de apoyo</h3>
+                <p className="text-gray-700">
+                  Conecta con otros emprendedores y accede a proyectos con mentores asignados por BCP
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <CTA />
       </main>
       <ChatbotAssistant />

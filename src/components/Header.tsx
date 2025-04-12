@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronDown, Search, User, BookOpen, Shield, Award, Users } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, User, BookOpen, Shield, Award, Users, Store, HandHelping, Store as StoreIcon } from 'lucide-react';
 import { 
   NavigationMenu,
   NavigationMenuContent,
@@ -54,7 +54,7 @@ const Header = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent">Aprendizaje</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="bg-transparent">Menú Principal</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       <li>
@@ -109,6 +109,32 @@ const Header = () => {
                           </Link>
                         </NavigationMenuLink>
                       </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/mercado-solidario" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center gap-2">
+                              <StoreIcon className="h-5 w-5 text-bcp-blue" />
+                              <div className="text-sm font-medium leading-none">Mercado Solidario</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Apoya a emprendedores afectados por desastres comprando sus productos
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link to="/gamificacion" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                            <div className="flex items-center gap-2">
+                              <Award className="h-5 w-5 text-bcp-orange" />
+                              <div className="text-sm font-medium leading-none">Soles de Resiliencia</div>
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              Gana puntos y recompensas mientras aprendes a proteger tu negocio
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -118,8 +144,13 @@ const Header = () => {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/plan" className={cn(navigationMenuTriggerStyle(), "bg-transparent")}>
-                    Mi Plan
+                  <Link to="/proyectos" className={cn(navigationMenuTriggerStyle(), "bg-transparent")}>
+                    Proyectos
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link to="/mercado-solidario" className={cn(navigationMenuTriggerStyle(), "bg-transparent")}>
+                    Mercado Solidario
                   </Link>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -173,6 +204,14 @@ const Header = () => {
             <Link to="/proyectos" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
               <Users className="h-5 w-5 mr-2 text-bcp-blue" />
               Proyectos
+            </Link>
+            <Link to="/mercado-solidario" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
+              <StoreIcon className="h-5 w-5 mr-2 text-bcp-blue" />
+              Mercado Solidario
+            </Link>
+            <Link to="/gamificacion" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
+              <Award className="h-5 w-5 mr-2 text-bcp-orange" />
+              Soles de Resiliencia
             </Link>
             <div className="pt-2 border-t border-gray-200 mt-2">
               <Link to="/login" className="block px-4 py-2 hover:bg-gray-100 rounded">Mi cuenta</Link>

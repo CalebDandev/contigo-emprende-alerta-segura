@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Search, Filter, ShoppingBag, Heart, MapPin, Clock, Tag, TrendingUp, ShoppingCart } from 'lucide-react';
+import { Search, Filter, ShoppingBag, Heart, MapPin, Clock, Tag, TrendingUp, ShoppingCart, AlertCircle, HandHelping, Users } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Input } from '@/components/ui/input';
@@ -278,12 +277,10 @@ const MercadoSolidario = () => {
                 </div>
               </TabsContent>
               
-              {/* Similar structure for the other tabs */}
               <TabsContent value="alimentos" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredProducts.filter(p => p.category === "Alimentos").map(product => (
                     <Card key={product.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                      {/* Similar card structure as above */}
                       <div className="relative">
                         <img 
                           src={product.imageUrl} 
@@ -343,7 +340,6 @@ const MercadoSolidario = () => {
           </div>
         </section>
         
-        {/* How it works section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">

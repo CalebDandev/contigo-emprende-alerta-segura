@@ -3,6 +3,8 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FileText, Video, Bookmark, Download, ExternalLink } from 'lucide-react';
+import RoadmapSection from '../components/RoadmapSection';
+import { Link } from 'react-router-dom';
 
 const Recursos = () => {
   const resources = [
@@ -86,25 +88,29 @@ const Recursos = () => {
             <nav className="flex py-3 text-sm" aria-label="Breadcrumb">
               <ol className="flex items-center space-x-2">
                 <li>
-                  <a href="/" className="text-gray-500 hover:text-bcp-blue">Inicio</a>
+                  <Link to="/" className="text-gray-500 hover:text-bcp-blue">Inicio</Link>
                 </li>
                 <li>
                   <span className="text-gray-500 mx-2">/</span>
                 </li>
                 <li>
-                  <a href="/" className="text-gray-500 hover:text-bcp-blue">Contigo Emprendedor</a>
+                  <Link to="/" className="text-gray-500 hover:text-bcp-blue">Contigo Emprendedor</Link>
                 </li>
                 <li>
                   <span className="text-gray-500 mx-2">/</span>
                 </li>
                 <li className="text-bcp-blue font-medium" aria-current="page">
-                  Recursos
+                  Cursos y Recursos
                 </li>
               </ol>
             </nav>
           </div>
         </div>
 
+        {/* Roadmap Section */}
+        <RoadmapSection />
+        
+        {/* Resources Section */}
         <section className="bcp-section bg-white">
           <div className="bcp-container">
             <div className="text-center mb-12">

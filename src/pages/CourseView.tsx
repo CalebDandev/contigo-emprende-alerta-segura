@@ -20,7 +20,8 @@ import {
   Clock,
   MessageSquare,
   HelpCircle,
-  User
+  User,
+  Play
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
@@ -29,8 +30,68 @@ const CourseView = () => {
   const [activeModule, setActiveModule] = useState(1);
   const [activePage, setActivePage] = useState(1);
   
+  // Find if we're viewing the financial management course
+  const isFinancialCourse = courseId === 'curso-3';
+  
   // Mock course data - in a real app, you would fetch this based on the courseId
-  const courseData = {
+  const courseData = isFinancialCourse ? {
+    id: 'curso-3',
+    title: 'Aprende a manejar tu dinero correctamente',
+    description: 'Herramientas prácticas para mejorar tu gestión financiera personal y de negocio.',
+    progress: 15,
+    instructor: 'Ana Martínez',
+    instructorRole: 'Especialista en Finanzas Personales',
+    duration: '1.5 horas',
+    lastUpdate: '12 de abril, 2025',
+    modules: [
+      {
+        id: 1,
+        title: 'Módulo 1: Aprende a armar un presupuesto',
+        completed: true,
+        duration: '15 min',
+        pages: [
+          { id: 1, title: 'Bienvenida al curso', type: 'video', duration: '5:20', completed: true },
+          { id: 2, title: 'Importancia del presupuesto', type: 'content', duration: '4 min', completed: true },
+          { id: 3, title: 'Elementos básicos de un presupuesto', type: 'content', duration: '6 min', completed: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Módulo 2: Ahorra por un Plan',
+        completed: false,
+        duration: '15 min',
+        pages: [
+          { id: 1, title: 'Estrategias de ahorro', type: 'video', duration: '7:45', completed: false },
+          { id: 2, title: 'Establecimiento de metas', type: 'content', duration: '5 min', completed: false },
+          { id: 3, title: 'Herramientas para seguimiento de ahorro', type: 'interactive', duration: '7 min', completed: false }
+        ]
+      },
+      {
+        id: 3,
+        title: 'Módulo 3: Maneja bien tus deudas',
+        completed: false,
+        duration: '30 min',
+        pages: [
+          { id: 1, title: 'Tipos de deuda: buena y mala', type: 'video', duration: '8:30', completed: false },
+          { id: 2, title: 'Estrategias para pago de deudas', type: 'content', duration: '10 min', completed: false },
+          { id: 3, title: 'Plantilla de control de deudas', type: 'download', size: '1.8 MB', completed: false },
+          { id: 4, title: 'Ejercicio práctico', type: 'activity', duration: '12 min', completed: false }
+        ]
+      },
+      {
+        id: 4,
+        title: 'Módulo 4: Usa canales digitales y aprende a prevenir fraudes',
+        completed: false,
+        duration: '25 min',
+        pages: [
+          { id: 1, title: 'Beneficios de la banca digital', type: 'video', duration: '6:15', completed: false },
+          { id: 2, title: 'Señales de alerta de fraude', type: 'content', duration: '8 min', completed: false },
+          { id: 3, title: 'Medidas de seguridad', type: 'content', duration: '5 min', completed: false },
+          { id: 4, title: 'Evaluación final', type: 'quiz', questions: 10, completed: false }
+        ]
+      }
+    ]
+  } : {
     id: 'curso-1',
     title: 'Fundamentos de resiliencia empresarial',
     description: 'Conceptos básicos para preparar tu negocio ante situaciones adversas.',
@@ -154,13 +215,21 @@ const CourseView = () => {
       case 'video':
         return (
           <div className="aspect-video bg-gray-800 rounded-lg mb-8 overflow-hidden">
-            <div className="flex items-center justify-center h-full">
-              <div className="text-center">
-                <PlayCircle className="h-16 w-16 text-white/60 mx-auto mb-4" />
-                <p className="text-white text-lg">Video: {currentPage.title}</p>
-                <p className="text-white/70">Duración: {currentPage.duration}</p>
+            {isFinancialCourse ? (
+              <img 
+                src="/lovable-uploads/3d653eae-420e-477c-92dc-73d4bd3dbf9c.png" 
+                alt="Curso de finanzas" 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <PlayCircle className="h-16 w-16 text-white/60 mx-auto mb-4" />
+                  <p className="text-white text-lg">Video: {currentPage.title}</p>
+                  <p className="text-white/70">Duración: {currentPage.duration}</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         );
       case 'content':
@@ -168,24 +237,37 @@ const CourseView = () => {
           <div className="prose max-w-none mb-8">
             <h2>{currentPage.title}</h2>
             <p>
-              La resiliencia empresarial es la capacidad de una organización para anticipar, prepararse, responder y adaptarse 
-              a cambios incrementales y disrupciones repentinas para sobrevivir y prosperar. En el contexto de pequeños 
-              emprendimientos, esto significa tener la capacidad de recuperarse rápidamente de situaciones adversas, como 
-              desastres naturales, crisis económicas o cambios en el mercado.
+              {isFinancialCourse ? 
+                'Para tener un control eficiente de tus finanzas personales, es fundamental comenzar por crear un presupuesto detallado. Este te permitirá visualizar claramente tus ingresos, gastos y establecer metas de ahorro realistas.' : 
+                'La resiliencia empresarial es la capacidad de una organización para anticipar, prepararse, responder y adaptarse a cambios incrementales y disrupciones repentinas para sobrevivir y prosperar. En el contexto de pequeños emprendimientos, esto significa tener la capacidad de recuperarse rápidamente de situaciones adversas, como desastres naturales, crisis económicas o cambios en el mercado.'
+              }
             </p>
             <p>
-              Los negocios resilientes se caracterizan por:
+              {isFinancialCourse ? 'Los elementos clave de un presupuesto incluyen:' : 'Los negocios resilientes se caracterizan por:'}
             </p>
             <ul>
-              <li>Capacidad de adaptación al cambio</li>
-              <li>Redundancia en sistemas críticos</li>
-              <li>Planificación previa para diferentes escenarios</li>
-              <li>Cultura organizacional que fomenta la innovación y flexibilidad</li>
-              <li>Sistemas de alerta temprana</li>
+              {isFinancialCourse ? (
+                <>
+                  <li>Registro detallado de ingresos mensuales</li>
+                  <li>Categorización de gastos fijos y variables</li>
+                  <li>Asignación para ahorros e inversiones</li>
+                  <li>Fondo de emergencia</li>
+                  <li>Sistema de seguimiento regular</li>
+                </>
+              ) : (
+                <>
+                  <li>Capacidad de adaptación al cambio</li>
+                  <li>Redundancia en sistemas críticos</li>
+                  <li>Planificación previa para diferentes escenarios</li>
+                  <li>Cultura organizacional que fomenta la innovación y flexibilidad</li>
+                  <li>Sistemas de alerta temprana</li>
+                </>
+              )}
             </ul>
             <p>
-              Desarrollar estas capacidades permitirá a tu negocio no solo sobrevivir en tiempos difíciles, sino incluso 
-              encontrar oportunidades de crecimiento durante las crisis.
+              {isFinancialCourse ? 
+                'Desarrollar un buen presupuesto te permitirá tomar decisiones financieras más informadas y alcanzar tus metas económicas más rápidamente.' : 
+                'Desarrollar estas capacidades permitirá a tu negocio no solo sobrevivir en tiempos difíciles, sino incluso encontrar oportunidades de crecimiento durante las crisis.'}
             </p>
           </div>
         );
@@ -196,28 +278,32 @@ const CourseView = () => {
             <p className="mb-4">Este cuestionario consta de {currentPage.questions} preguntas y evaluará tu comprensión de los conceptos clave de este módulo.</p>
             <div className="space-y-4 mb-6">
               <div className="bg-white p-4 rounded border border-gray-200">
-                <p className="font-medium mb-2">1. ¿Cuál de las siguientes NO es una característica de un negocio resiliente?</p>
+                <p className="font-medium mb-2">{isFinancialCourse ? 
+                '1. ¿Cuál de los siguientes NO es un componente esencial de un presupuesto efectivo?' : 
+                '1. ¿Cuál de las siguientes NO es una característica de un negocio resiliente?'}</p>
                 <div className="space-y-2">
                   <div className="flex items-center">
                     <input type="radio" id="q1a" name="q1" className="mr-2" />
-                    <label htmlFor="q1a">Flexibilidad operativa</label>
+                    <label htmlFor="q1a">{isFinancialCourse ? 'Registro de ingresos' : 'Flexibilidad operativa'}</label>
                   </div>
                   <div className="flex items-center">
                     <input type="radio" id="q1b" name="q1" className="mr-2" />
-                    <label htmlFor="q1b">Planificación de contingencia</label>
+                    <label htmlFor="q1b">{isFinancialCourse ? 'Categorización de gastos' : 'Planificación de contingencia'}</label>
                   </div>
                   <div className="flex items-center">
                     <input type="radio" id="q1c" name="q1" className="mr-2" />
-                    <label htmlFor="q1c">Resistencia al cambio</label>
+                    <label htmlFor="q1c">{isFinancialCourse ? 'Comparación con los gastos de amigos' : 'Resistencia al cambio'}</label>
                   </div>
                   <div className="flex items-center">
                     <input type="radio" id="q1d" name="q1" className="mr-2" />
-                    <label htmlFor="q1d">Diversificación de recursos</label>
+                    <label htmlFor="q1d">{isFinancialCourse ? 'Fondo de emergencia' : 'Diversificación de recursos'}</label>
                   </div>
                 </div>
               </div>
               <div className="bg-white p-4 rounded border border-gray-200">
-                <p className="font-medium mb-2">2. ¿Por qué es importante tener un plan de resiliencia para tu negocio?</p>
+                <p className="font-medium mb-2">{isFinancialCourse ?
+                '2. ¿Por qué es importante establecer metas financieras específicas en tu presupuesto?' :
+                '2. ¿Por qué es importante tener un plan de resiliencia para tu negocio?'}</p>
                 {/* More quiz questions would be here */}
               </div>
             </div>
@@ -268,7 +354,7 @@ const CourseView = () => {
                   <span className="text-gray-500 mx-2">/</span>
                 </li>
                 <li>
-                  <a href="/" className="text-gray-500 hover:text-bcp-blue">Cursos</a>
+                  <a href="/cursos" className="text-gray-500 hover:text-bcp-blue">Cursos</a>
                 </li>
                 <li>
                   <span className="text-gray-500 mx-2">/</span>
@@ -344,10 +430,13 @@ const CourseView = () => {
                               setActiveModule(module.id);
                               setActivePage(module.pages[0].id);
                             }}
-                            className="font-medium text-left"
+                            className="font-medium text-left flex-grow"
                           >
                             {module.title}
                           </button>
+                          {module.duration && (
+                            <span className="text-xs text-gray-500 whitespace-nowrap">{module.duration}</span>
+                          )}
                         </div>
                         
                         {activeModule === module.id && (
@@ -480,17 +569,19 @@ const CourseView = () => {
                           <div className="text-sm text-gray-500">Hace 2 días</div>
                         </div>
                         <p className="text-gray-600">
-                          Excelente material. Me gustaría saber si estos conceptos aplican igual para negocios pequeños o principalmente
-                          son para empresas medianas.
+                          {isFinancialCourse ? 
+                            'Excelente explicación sobre presupuestos. ¿Recomiendan alguna app específica para llevar el control de gastos?' : 
+                            'Excelente material. Me gustaría saber si estos conceptos aplican igual para negocios pequeños o principalmente son para empresas medianas.'}
                         </p>
                         <div className="mt-3 pl-4 border-l-2 border-gray-300">
                           <div className="flex justify-between mb-1">
-                            <div className="font-medium text-bcp-blue">Carlos Rodríguez (Instructor)</div>
+                            <div className="font-medium text-bcp-blue">{isFinancialCourse ? 'Ana Martínez (Instructora)' : 'Carlos Rodríguez (Instructor)'}</div>
                             <div className="text-sm text-gray-500">Hace 1 día</div>
                           </div>
                           <p className="text-gray-600">
-                            Hola María, los conceptos son adaptables a negocios de cualquier tamaño. En la sección 2.3 veremos
-                            ejemplos específicos para microempresas.
+                            {isFinancialCourse ? 
+                              'Hola María, recomiendo YNAB (You Need A Budget) o Mint. En el módulo 2 exploraremos algunas herramientas gratuitas.' : 
+                              'Hola María, los conceptos son adaptables a negocios de cualquier tamaño. En la sección 2.3 veremos ejemplos específicos para microempresas.'}
                           </p>
                         </div>
                       </div>
@@ -517,7 +608,7 @@ const CourseView = () => {
                     <ul className="space-y-2">
                       <li className="flex items-center p-2 border-b border-gray-100">
                         <FileText className="h-5 w-5 text-bcp-blue mr-3" />
-                        <span className="flex-grow">Guía completa de resiliencia empresarial</span>
+                        <span className="flex-grow">{isFinancialCourse ? 'Guía completa de gestión financiera' : 'Guía completa de resiliencia empresarial'}</span>
                         <Button variant="outline" size="sm" className="flex items-center">
                           <Download className="h-3 w-3 mr-1" />
                           PDF
@@ -525,12 +616,12 @@ const CourseView = () => {
                       </li>
                       <li className="flex items-center p-2 border-b border-gray-100">
                         <PlayCircle className="h-5 w-5 text-bcp-blue mr-3" />
-                        <span className="flex-grow">Video: Ejemplos reales de negocios resilientes</span>
+                        <span className="flex-grow">{isFinancialCourse ? 'Video: Claves para un presupuesto exitoso' : 'Video: Ejemplos reales de negocios resilientes'}</span>
                         <Button variant="outline" size="sm">Ver</Button>
                       </li>
                       <li className="flex items-center p-2">
                         <FileText className="h-5 w-5 text-bcp-blue mr-3" />
-                        <span className="flex-grow">Plantilla: Evaluación de riesgos</span>
+                        <span className="flex-grow">{isFinancialCourse ? 'Plantilla: Control de gastos e ingresos' : 'Plantilla: Evaluación de riesgos'}</span>
                         <Button variant="outline" size="sm">XLSX</Button>
                       </li>
                     </ul>

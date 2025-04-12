@@ -33,12 +33,25 @@ const RoadmapSection = () => {
       videoThumbnail: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
       instructor: 'María González',
       features: ['4 módulos', '6 cuestionarios', '5 descargas']
+    },
+    {
+      id: 'curso-3',
+      title: 'Aprende a manejar tu dinero correctamente',
+      description: 'Herramientas prácticas para mejorar tu gestión financiera personal y de negocio.',
+      progress: 0,
+      modules: 4,
+      timeEstimate: '1.5 horas',
+      category: 'Finanzas Personales',
+      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      videoThumbnail: '/lovable-uploads/3d653eae-420e-477c-92dc-73d4bd3dbf9c.png',
+      instructor: 'Ana Martínez',
+      features: ['4 módulos', '5 cuestionarios', '3 descargas']
     }
   ];
   
   const lockedCourses = [
     {
-      id: 'curso-3',
+      id: 'curso-4',
       title: 'Liderazgo en tiempos de crisis',
       description: 'Aprende a guiar a tu equipo durante situaciones críticas.',
       requiredCoins: 120,
@@ -46,10 +59,11 @@ const RoadmapSection = () => {
       timeEstimate: '3 horas',
       category: 'Liderazgo',
       image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      instructor: 'Ana Martínez'
+      instructor: 'Ana Martínez',
+      prerequisite: 'curso-1'
     },
     {
-      id: 'curso-4',
+      id: 'curso-5',
       title: 'Adaptación de modelos de negocio',
       description: 'Pivotando tu negocio en función de escenarios cambiantes.',
       requiredCoins: 180,
@@ -57,9 +71,27 @@ const RoadmapSection = () => {
       timeEstimate: '2.5 horas',
       category: 'Estrategia',
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      instructor: 'Roberto Sánchez'
+      instructor: 'Roberto Sánchez',
+      prerequisite: 'curso-2'
+    },
+    {
+      id: 'curso-6',
+      title: 'Gestión de emergencias naturales',
+      description: 'Cómo preparar tu negocio ante desastres naturales y emergencias.',
+      requiredCoins: 200,
+      modules: 6,
+      timeEstimate: '3 horas',
+      category: 'Gestión de Crisis',
+      image: 'https://images.unsplash.com/photo-1516937941344-00b4e0337589?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+      instructor: 'Pedro Alonso',
+      prerequisite: 'curso-4'
     }
   ];
+
+  const getPrerequisiteText = (courseId) => {
+    const prerequisiteCourse = [...unlockedCourses, ...lockedCourses].find(c => c.id === courseId);
+    return prerequisiteCourse ? prerequisiteCourse.title : 'Curso previo';
+  };
 
   return (
     <section className="bcp-section bg-gray-50 py-16">
@@ -67,7 +99,7 @@ const RoadmapSection = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">Ruta de Aprendizaje</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Accede a cursos especializados que te ayudarán a fortalecer tu negocio. Desbloquea nuevos módulos a medida que ganas Soles de Resiliencia.
+            Accede a cursos especializados que te ayudarán a fortalecer tu negocio. Desbloquea nuevos módulos a medida que completas los cursos previos.
           </p>
         </div>
 
@@ -77,7 +109,7 @@ const RoadmapSection = () => {
             Cursos Disponibles
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {unlockedCourses.map((course) => (
               <div key={course.id} className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-full border border-gray-100">
                 <div className="h-56 overflow-hidden relative">
@@ -129,14 +161,12 @@ const RoadmapSection = () => {
                   </div>
                   
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div>
-                        {course.features && course.features.map((feature, index) => (
-                          <Badge key={index} variant="outline" className="mr-2 mb-2">
-                            {feature}
-                          </Badge>
-                        ))}
-                      </div>
+                    <div className="flex flex-wrap text-sm text-gray-600">
+                      {course.features && course.features.map((feature, index) => (
+                        <Badge key={index} variant="outline" className="mr-2 mb-2">
+                          {feature}
+                        </Badge>
+                      ))}
                     </div>
                     
                     <div>
@@ -180,9 +210,17 @@ const RoadmapSection = () => {
                       </div>
                     )}
                     
-                    <Badge variant="outline" className="mb-2 bg-amber-50 text-amber-800 border-amber-200">
-                      <Lock className="h-3 w-3 mr-1" /> {course.requiredCoins} Soles para desbloquear
-                    </Badge>
+                    <div className="flex flex-col gap-2 mb-3">
+                      <Badge variant="outline" className="inline-flex w-fit bg-amber-50 text-amber-800 border-amber-200">
+                        <Lock className="h-3 w-3 mr-1" /> {course.requiredCoins} Soles para desbloquear
+                      </Badge>
+                      
+                      {course.prerequisite && (
+                        <Badge variant="outline" className="inline-flex w-fit bg-blue-50 text-blue-800 border-blue-200">
+                          Requiere: {getPrerequisiteText(course.prerequisite)}
+                        </Badge>
+                      )}
+                    </div>
                     
                     <h4 className="text-lg font-bold mb-2">{course.title}</h4>
                     <p className="text-gray-600 mb-3">{course.description}</p>

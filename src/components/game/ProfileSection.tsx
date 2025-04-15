@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
-interface ProfileSectionProps {
+export interface ProfileSectionProps {
   userCoins: number;
   userLevel: number;
   progress: number;
@@ -95,7 +95,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ userCoins, userLevel, p
     { icon: <Trophy className="text-bcp-orange" />, value: "2", label: "Desafíos completados" },
     { icon: <Star className="text-amber-500" />, value: "3", label: "Racha actual (días)" },
     { icon: <Award className="text-bcp-blue" />, value: "1/5", label: "Logros desbloqueados" },
-    { icon: <TrendingUp className="text-green-600" />, value: userCoins.toString(), label: "AlertaCoins totales" },
+    { icon: <TrendingUp className="text-green-600" />, value: userCoins.toString(), label: "Puntos de resiliencia" },
     { icon: <Clock className="text-purple-600" />, value: "35min", label: "Tiempo de aprendizaje" }
   ];
 
@@ -131,7 +131,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ userCoins, userLevel, p
                 style={{ width: `${(userCoins / nextLevel.coinsNeeded) * 100}%` }}
               ></div>
             </div>
-            <span className="ml-2 text-sm">{userCoins}/{nextLevel.coinsNeeded} AlertaCoins</span>
+            <span className="ml-2 text-sm">{userCoins}/{nextLevel.coinsNeeded} puntos de resiliencia</span>
           </div>
           
           <div className="mt-4 text-sm bg-white/10 rounded-lg p-3">

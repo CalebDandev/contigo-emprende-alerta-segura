@@ -6,8 +6,29 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
-const RoadmapSection = () => {
-  const unlockedCourses = [
+interface Course {
+  id: number | string;
+  title: string;
+  description: string;
+  image?: string;
+  level?: string;
+  completed?: boolean;
+  duration: string;
+  instructor?: string;
+  badge?: string;
+  progress?: number;
+  timeEstimate?: string;
+  requiredPoints?: number;
+  prerequisite?: string;
+}
+
+interface RoadmapSectionProps {
+  courses?: Course[];
+}
+
+const RoadmapSection: React.FC<RoadmapSectionProps> = ({ courses }) => {
+  // Use props.courses if provided, otherwise use default courses
+  const unlockedCourses = courses ? courses.filter(c => c.completed !== false).slice(0, 3) : [
     {
       id: 'modulo-1',
       title: 'Conoce los procesos clave',
@@ -125,7 +146,7 @@ const RoadmapSection = () => {
                     </div>
                     <div className="flex items-center">
                       <Clock className="h-4 w-4 text-gray-400 mr-1" />
-                      <span className="text-sm">{course.timeEstimate}</span>
+                      <span className="text-sm">{course.timeEstimate || course.duration}</span>
                     </div>
                   </div>
                   
@@ -133,13 +154,13 @@ const RoadmapSection = () => {
                     <div className="mb-3">
                       <div className="flex justify-between text-sm mb-1">
                         <span>Progreso</span>
-                        <span className="font-medium">{course.progress}%</span>
+                        <span className="font-medium">{course.progress || 0}%</span>
                       </div>
-                      <Progress value={course.progress} className="h-2" />
+                      <Progress value={course.progress || 0} className="h-2" />
                     </div>
                     
                     <Link to={`/curso/${course.id}`}>
-                      <Button className="w-full">{course.progress > 0 ? 'Continuar módulo' : 'Comenzar módulo'}</Button>
+                      <Button className="w-full">{course.progress && course.progress > 0 ? 'Continuar módulo' : 'Comenzar módulo'}</Button>
                     </Link>
                   </div>
                 </div>

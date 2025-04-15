@@ -111,7 +111,7 @@ const GameModule = () => {
           </TabsContent>
           
           <TabsContent value="perfil">
-            <ProfileSection userPoints={userPoints} userLevel={userLevel} progress={progress} />
+            <ProfileSection userCoins={userPoints} userLevel={userLevel} progress={progress} />
           </TabsContent>
           
           <TabsContent value="ranking">

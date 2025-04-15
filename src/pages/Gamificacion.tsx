@@ -20,7 +20,7 @@ const Gamificacion = () => {
                   <span className="text-gray-500 mx-2">/</span>
                 </li>
                 <li>
-                  <a href="/" className="text-gray-500 hover:text-bcp-blue">Escudo BCP</a>
+                  <a href="/" className="text-gray-500 hover:text-bcp-blue">Contigo Emprendedor</a>
                 </li>
                 <li>
                   <span className="text-gray-500 mx-2">/</span>

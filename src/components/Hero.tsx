@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Target, FileCheck, Users, Award } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 
 const Hero = () => {
   return (
@@ -10,57 +10,23 @@ const Hero = () => {
       <div className="bcp-container relative z-10">
         <div className="flex flex-col md:flex-row items-center py-12 md:py-20">
           <div className="md:w-1/2 mb-8 md:mb-0 animate-fade-in">
+            <div className="inline-block bg-bcp-orange text-white px-4 py-1 rounded-full text-sm mb-4">
+              Programa del BCP para emprendedores
+            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Escudo BCP
+              Contigo Emprendedor<br />
+              <span className="text-bcp-orange">Alerta Segura</span>
             </h1>
             <p className="text-xl mb-8 max-w-lg">
-              Una plataforma que te ayuda a proteger tu emprendimiento de los fenómenos naturales
+              La plataforma que te ayuda a proteger tu negocio ante emergencias y desastres con un plan personalizado para prevenir, actuar y recuperarte.
             </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              <div className="flex items-start bg-white/10 rounded-lg p-3">
-                <Target className="h-6 w-6 text-bcp-orange mr-3 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-medium">Conocer tu perfil de riesgo</h3>
-                </div>
-              </div>
-              
-              <div className="flex items-start bg-white/10 rounded-lg p-3">
-                <FileCheck className="h-6 w-6 text-bcp-orange mr-3 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-medium">Crear un plan de contingencia paso a paso</h3>
-                </div>
-              </div>
-              
-              <div className="flex items-start bg-white/10 rounded-lg p-3">
-                <ShieldCheck className="h-6 w-6 text-bcp-orange mr-3 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-medium">Misiones aplicadas a tu negocio</h3>
-                </div>
-              </div>
-              
-              <div className="flex items-start bg-white/10 rounded-lg p-3">
-                <Award className="h-6 w-6 text-bcp-orange mr-3 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-medium">Puntos de resiliencia para beneficios exclusivos</h3>
-                </div>
-              </div>
-              
-              <div className="flex items-start bg-white/10 rounded-lg p-3 md:col-span-2">
-                <Users className="h-6 w-6 text-bcp-orange mr-3 flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-medium">Red de colaboración entre emprendedores y voluntarios BCP</h3>
-                </div>
-              </div>
-            </div>
-            
             <div className="flex flex-wrap gap-4">
               <Link to="/evaluacion" className="bcp-button-primary flex items-center">
                 Evalúa tu negocio 
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <Link to="/recursos" className="bg-white text-bcp-blue font-medium py-3 px-6 rounded-full hover:bg-opacity-90 transition-all flex items-center">
-                Módulos gratuitos
+                Recursos gratuitos
                 <ShieldCheck className="ml-2 h-5 w-5" />
               </Link>
             </div>

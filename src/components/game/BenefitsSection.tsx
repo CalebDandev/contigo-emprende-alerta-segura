@@ -8,7 +8,8 @@ import {
   Medal, 
   Ticket,
   ShieldCheck,
-  Trophy
+  Trophy,
+  Shield
 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

@@ -166,6 +166,7 @@ const Recursos = () => {
         </div>
 
         {/* Roadmap Section with updated courses */}
+        {/* Here we ensure we pass the correct props */}
         <RoadmapSection courses={courses} />
         
         {/* Resources Section */}

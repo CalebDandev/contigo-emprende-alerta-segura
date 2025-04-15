@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -79,7 +78,6 @@ const Recursos = () => {
     }
   ];
 
-  // Updated course names and descriptions
   const courses = [
     {
       id: 1,
@@ -165,11 +163,8 @@ const Recursos = () => {
           </div>
         </div>
 
-        {/* Roadmap Section with updated courses */}
-        {/* Here we ensure we pass the correct props */}
         <RoadmapSection courses={courses} />
         
-        {/* Resources Section */}
         <section className="bcp-section bg-white">
           <div className="bcp-container">
             <div className="text-center mb-12">

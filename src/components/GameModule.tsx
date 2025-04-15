@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Star, 
@@ -6,7 +7,9 @@ import {
   Coins,
   Zap,
   Lightbulb,
-  Flag
+  Flag,
+  Shield,
+  ShieldCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

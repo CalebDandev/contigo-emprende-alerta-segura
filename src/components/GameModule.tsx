@@ -1,14 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
-  Shield, 
-  ShieldCheck, 
   Star, 
   Gift, 
   BookOpen, 
   Coins,
   Zap,
-  Rocket,
   Lightbulb,
   Flag
 } from 'lucide-react';
@@ -17,17 +13,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/hooks/use-toast';
-import GamesSection from './game/GamesSection';
-import RewardsSection from './game/RewardsSection';
+import BenefitsSection from './game/BenefitsSection';
 import ProfileSection from './game/ProfileSection';
 import LeaderboardSection from './game/LeaderboardSection';
-import BenefitsSection from './game/BenefitsSection';
 
 const GameModule = () => {
   const [userCoins, setUserCoins] = useState(0);
   const [userLevel, setUserLevel] = useState(1);
   const [progress, setProgress] = useState(0);
-  const [activeTab, setActiveTab] = useState("juegos");
+  const [activeTab, setActiveTab] = useState("beneficios");
 
   const shieldLevels = [
     { id: 1, name: "Escudo Semilla", description: "Emprendedor en formación", icon: <Shield className="h-8 w-8 text-bcp-blue" /> },
@@ -46,25 +40,6 @@ const GameModule = () => {
     }, 500);
   }, []);
 
-  const handleEarnCoins = (amount: number) => {
-    setUserCoins(prev => prev + amount);
-    toast({
-      title: "¡Felicitaciones!",
-      description: `Has ganado ${amount} Soles de Resiliencia`,
-      variant: "default",
-    });
-
-    // Actualizar nivel si es necesario
-    if (userCoins + amount >= 100 && userLevel === 1) {
-      setUserLevel(2);
-      toast({
-        title: "¡Has desbloqueado un nuevo escudo!",
-        description: "Has alcanzado el Escudo Brote: Preparando la tierra",
-        variant: "default",
-      });
-    }
-  };
-
   const currentShield = shieldLevels.find(shield => shield.id === userLevel) || shieldLevels[0];
 
   return (
@@ -74,7 +49,7 @@ const GameModule = () => {
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Zona Resiliente BCP</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Prepara tu emprendimiento para cualquier situación mientras aprendes y te diviertes. 
-            Supera desafíos, gana Soles de Resiliencia y desbloquea escudos que te convierten en un emprendedor resiliente.
+            Gana Soles de Resiliencia y desbloquea escudos que te convierten en un emprendedor resiliente.
           </p>
         </div>
 
@@ -107,11 +82,7 @@ const GameModule = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4">
-            <div className="bg-blue-50 rounded-lg p-3 text-center">
-              <Rocket className="mx-auto text-bcp-blue mb-1" size={24} />
-              <p className="text-sm">2 Rutas Resilientes</p>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mb-4">
             <div className="bg-green-50 rounded-lg p-3 text-center">
               <Lightbulb className="mx-auto text-green-600 mb-1" size={24} />
               <p className="text-sm">1 Escudo desbloqueado</p>
@@ -127,25 +98,15 @@ const GameModule = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="juegos" onValueChange={setActiveTab} value={activeTab} className="w-full">
-          <TabsList className="grid grid-cols-5 mb-8">
-            <TabsTrigger value="juegos">Desafíos</TabsTrigger>
+        <Tabs defaultValue="beneficios" onValueChange={setActiveTab} value={activeTab} className="w-full">
+          <TabsList className="grid grid-cols-3 mb-8">
             <TabsTrigger value="beneficios">Beneficios</TabsTrigger>
-            <TabsTrigger value="recompensas">Arsenal</TabsTrigger>
             <TabsTrigger value="perfil">Mi Perfil</TabsTrigger>
             <TabsTrigger value="ranking">Ranking</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="juegos">
-            <GamesSection onEarnCoins={handleEarnCoins} />
-          </TabsContent>
-          
           <TabsContent value="beneficios">
             <BenefitsSection />
-          </TabsContent>
-          
-          <TabsContent value="recompensas">
-            <RewardsSection userCoins={userCoins} />
           </TabsContent>
           
           <TabsContent value="perfil">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Star, 
@@ -18,9 +17,9 @@ const BenefitsSection = () => {
   return (
     <div className="mb-10">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2">Beneficios de Soles de Resiliencia</h2>
+        <h2 className="text-2xl font-bold mb-2">Beneficios de puntos de resiliencia</h2>
         <p className="text-gray-600">
-          Acumula Soles de Resiliencia mientras fortaleces tu negocio y canjéalos por beneficios exclusivos
+          Acumula puntos de resiliencia mientras fortaleces tu negocio y canjéalos por beneficios exclusivos
         </p>
       </div>
       
@@ -40,26 +39,26 @@ const BenefitsSection = () => {
                   Niveles de Emprendedor Resiliente
                 </CardTitle>
                 <CardDescription>
-                  Desbloquea niveles exclusivos mientras acumulas Soles
+                  Desbloquea niveles exclusivos mientras acumulas puntos de resiliencia
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <Shield className="h-5 w-5 text-gray-400 mr-2" />
-                    <span><strong>Nivel Semilla:</strong> 0-50 Soles</span>
+                    <span><strong>Nivel Semilla:</strong> 0-50 puntos de resiliencia</span>
                   </li>
                   <li className="flex items-center">
                     <Shield className="h-5 w-5 text-green-600 mr-2" />
-                    <span><strong>Nivel Brote:</strong> 51-150 Soles</span>
+                    <span><strong>Nivel Brote:</strong> 51-150 puntos de resiliencia</span>
                   </li>
                   <li className="flex items-center">
                     <Shield className="h-5 w-5 text-amber-600 mr-2" />
-                    <span><strong>Nivel Fortaleza:</strong> 151-300 Soles</span>
+                    <span><strong>Nivel Fortaleza:</strong> 151-300 puntos de resiliencia</span>
                   </li>
                   <li className="flex items-center">
                     <ShieldCheck className="h-5 w-5 text-bcp-orange mr-2" />
-                    <span><strong>Nivel Sol Naciente:</strong> 301+ Soles</span>
+                    <span><strong>Nivel Sol Naciente:</strong> 301+ puntos de resiliencia</span>
                   </li>
                 </ul>
               </CardContent>
@@ -107,7 +106,7 @@ const BenefitsSection = () => {
                 Sorteos Mensuales para Emprendedores
               </CardTitle>
               <CardDescription>
-                Cada 100 Soles de Resiliencia equivalen a un boleto para nuestros sorteos mensuales
+                Cada 100 puntos de resiliencia equivalen a un boleto para nuestros sorteos mensuales
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6">
@@ -151,10 +150,10 @@ const BenefitsSection = () => {
                   ¿Cómo participar?
                 </h3>
                 <ol className="list-decimal pl-5 space-y-1">
-                  <li>Acumula Soles de Resiliencia completando cursos y actividades</li>
-                  <li>Por cada 100 Soles, obtienes automáticamente un boleto para el sorteo</li>
+                  <li>Acumula puntos de resiliencia completando cursos y actividades</li>
+                  <li>Por cada 100 puntos, obtienes automáticamente un boleto para el sorteo</li>
                   <li>Los ganadores son anunciados el último día de cada mes</li>
-                  <li>¡Mientras más Soles acumules, más posibilidades tienes de ganar!</li>
+                  <li>¡Mientras más puntos acumules, más posibilidades tienes de ganar!</li>
                 </ol>
               </div>
             </CardContent>
@@ -167,7 +166,7 @@ const BenefitsSection = () => {
               <CardHeader className="bg-blue-50 pb-3">
                 <CardTitle className="flex items-center">
                   <Tag className="h-5 w-5 text-bcp-blue mr-2" />
-                  50 Soles
+                  50 puntos de resiliencia
                 </CardTitle>
                 <CardDescription>Descuentos básicos</CardDescription>
               </CardHeader>
@@ -193,7 +192,7 @@ const BenefitsSection = () => {
               <CardHeader className="bg-green-50 pb-3">
                 <CardTitle className="flex items-center">
                   <Tag className="h-5 w-5 text-green-600 mr-2" />
-                  150 Soles
+                  150 puntos de resiliencia
                 </CardTitle>
                 <CardDescription>Descuentos intermedios</CardDescription>
               </CardHeader>
@@ -219,7 +218,7 @@ const BenefitsSection = () => {
               <CardHeader className="bg-amber-50 pb-3">
                 <CardTitle className="flex items-center">
                   <Tag className="h-5 w-5 text-amber-600 mr-2" />
-                  300 Soles
+                  300 puntos de resiliencia
                 </CardTitle>
                 <CardDescription>Descuentos premium</CardDescription>
               </CardHeader>

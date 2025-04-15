@@ -21,7 +21,7 @@ import ProfileSection from './game/ProfileSection';
 import LeaderboardSection from './game/LeaderboardSection';
 
 const GameModule = () => {
-  const [userCoins, setUserCoins] = useState(0);
+  const [userPoints, setUserPoints] = useState(0);
   const [userLevel, setUserLevel] = useState(1);
   const [progress, setProgress] = useState(0);
   const [activeTab, setActiveTab] = useState("beneficios");
@@ -38,7 +38,7 @@ const GameModule = () => {
   useEffect(() => {
     // Simular carga de datos del usuario
     setTimeout(() => {
-      setUserCoins(50);
+      setUserPoints(50);
       setProgress(65);
     }, 500);
   }, []);
@@ -49,10 +49,10 @@ const GameModule = () => {
     <div className="bcp-section">
       <div className="bcp-container">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Zona Resiliente BCP</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Escudo BCP</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Prepara tu emprendimiento para cualquier situación mientras aprendes y te diviertes. 
-            Gana Soles de Resiliencia y desbloquea escudos que te convierten en un emprendedor resiliente.
+            Gana puntos de resiliencia y desbloquea escudos que te convierten en un emprendedor resiliente.
           </p>
         </div>
 
@@ -68,9 +68,7 @@ const GameModule = () => {
                 </div>
               </div>
               <div className="ml-4">
-                <h3 className="font-semibold text-lg">
-                  {currentShield.name}
-                </h3>
+                <h3 className="font-semibold text-lg">{currentShield.name}</h3>
                 <p className="text-sm text-gray-500">{currentShield.description}</p>
                 <div className="flex items-center mt-1">
                   <Progress value={progress} className="w-32 md:w-48 h-2" />
@@ -81,7 +79,7 @@ const GameModule = () => {
             
             <div className="flex items-center bg-amber-50 py-2 px-4 rounded-lg">
               <Flag className="text-amber-500 mr-2" size={20} />
-              <span className="font-medium text-amber-800">{userCoins} Soles de Resiliencia</span>
+              <span className="font-medium text-amber-800">{userPoints} puntos de resiliencia</span>
             </div>
           </div>
 
@@ -113,7 +111,7 @@ const GameModule = () => {
           </TabsContent>
           
           <TabsContent value="perfil">
-            <ProfileSection userCoins={userCoins} userLevel={userLevel} progress={progress} />
+            <ProfileSection userPoints={userPoints} userLevel={userLevel} progress={progress} />
           </TabsContent>
           
           <TabsContent value="ranking">

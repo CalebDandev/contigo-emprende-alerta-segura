@@ -49,7 +49,7 @@ const Index = () => {
                 </div>
                 
                 <div className="bg-blue-50 p-6 rounded-lg mb-6">
-                  <h3 className="font-bold text-xl text-bcp-blue mb-3">Todo cambió cuando descubrió Alerta Segura</h3>
+                  <h3 className="font-bold text-xl text-bcp-blue mb-3">Todo cambió cuando descubrió Escudo BCP</h3>
                   <ul className="space-y-3">
                     <li className="flex items-start">
                       <Shield className="h-5 w-5 text-bcp-blue mr-2 mt-1" />
@@ -82,11 +82,11 @@ const Index = () => {
           </div>
         </section>
         
-        {/* Why Alerta Segura Section */}
+        {/* Why Escudo BCP Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">¿Por qué Alerta Segura?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-bcp-blue mb-4">¿Por qué Escudo BCP?</h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Una solución integral para proteger tu negocio antes, durante y después de una emergencia
               </p>
@@ -109,7 +109,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Aprendizaje práctico</h3>
                 <p className="text-gray-700">
-                  Cursos diseñados especialmente para emprendedores con ejemplos prácticos y aplicables
+                  Módulos diseñados especialmente para emprendedores con ejemplos prácticos y aplicables
                 </p>
               </div>
               

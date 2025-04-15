@@ -12,6 +12,7 @@ import Proyectos from "./pages/Proyectos";
 import Gamificacion from "./pages/Gamificacion";
 import NotFound from "./pages/NotFound";
 import CourseView from "./pages/CourseView";
+import CourseDetail from "./pages/CourseDetail";
 import MercadoSolidario from "./pages/MercadoSolidario";
 
 const queryClient = new QueryClient();
@@ -31,7 +32,8 @@ const App = () => (
           <Route path="/proyectos" element={<Proyectos />} />
           <Route path="/mercado-solidario" element={<MercadoSolidario />} />
           <Route path="/gamificacion" element={<Gamificacion />} />
-          <Route path="/curso/:courseId" element={<CourseView />} />
+          <Route path="/curso/:courseId" element={<CourseDetail />} />
+          <Route path="/course-view/:courseId" element={<CourseView />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

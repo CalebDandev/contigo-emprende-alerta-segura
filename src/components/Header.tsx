@@ -24,18 +24,6 @@ const Header = () => {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="bcp-container">
-        {/* Top Navigation */}
-        <div className="flex justify-between py-2 text-sm border-b border-gray-100">
-          <div className="flex space-x-6">
-            <Link to="/" className="hover:text-bcp-blue">Personas</Link>
-            <Link to="/" className="hover:text-bcp-blue">PyMES</Link>
-            <Link to="/" className="hover:text-bcp-blue">Empresas</Link>
-          </div>
-          <div>
-            <Link to="/" className="hover:text-bcp-blue">Español / Quechua</Link>
-          </div>
-        </div>
-
         {/* Main Navigation */}
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
@@ -72,7 +60,7 @@ const Header = () => {
                       </li>
                       <li>
                         <NavigationMenuLink asChild>
-                          <Link to="/recursos" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                          <Link to="/cursos" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                             <div className="flex items-center gap-2">
                               <BookOpen className="h-5 w-5 text-bcp-blue" />
                               <div className="text-sm font-medium leading-none">Cursos</div>
@@ -144,7 +132,7 @@ const Header = () => {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/recursos" className={cn(navigationMenuTriggerStyle(), "bg-transparent")}>
+                  <Link to="/cursos" className={cn(navigationMenuTriggerStyle(), "bg-transparent")}>
                     Cursos
                   </Link>
                 </NavigationMenuItem>
@@ -198,7 +186,7 @@ const Header = () => {
               <Shield className="h-5 w-5 mr-2 text-bcp-blue" />
               Evaluar mi negocio
             </Link>
-            <Link to="/recursos" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
+            <Link to="/cursos" className="px-4 py-2 hover:bg-gray-100 rounded flex items-center">
               <BookOpen className="h-5 w-5 mr-2 text-bcp-blue" />
               Cursos
             </Link>

@@ -79,6 +79,64 @@ const Recursos = () => {
     }
   ];
 
+  // Updated course names and descriptions
+  const courses = [
+    {
+      id: 1,
+      title: "Conoce los procesos clave de tu negocio",
+      description: "Identifica qué actividades son esenciales para que tu negocio siga funcionando.",
+      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+      level: "Nivel Inicial",
+      completed: true,
+      duration: "45 min"
+    },
+    {
+      id: 2,
+      title: "Protege lo más importante",
+      description: "Asegura tus recursos clave como maquinaria, inventario, proveedores y personal.",
+      image: "https://images.unsplash.com/photo-1551703466-989478b447fc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+      level: "Nivel Inicial",
+      completed: true,
+      duration: "50 min"
+    },
+    {
+      id: 3,
+      title: "Crea un fondo de emergencia",
+      description: "Ahorra dinero para poder enfrentar imprevistos sin afectar tus operaciones.",
+      image: "https://images.unsplash.com/photo-1593672755342-741a7f868732?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+      level: "Nivel Intermedio",
+      completed: false,
+      duration: "60 min"
+    },
+    {
+      id: 4,
+      title: "Digitaliza tu información importante",
+      description: "Usa herramientas digitales para respaldar datos, registros de clientes y documentos clave.",
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+      level: "Nivel Intermedio",
+      completed: false,
+      duration: "55 min"
+    },
+    {
+      id: 5,
+      title: "Prepara un plan de comunicación en emergencias",
+      description: "Define cómo avisar a tus clientes, proveedores y equipo si ocurre una emergencia.",
+      image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+      level: "Nivel Avanzado",
+      completed: false,
+      duration: "65 min"
+    },
+    {
+      id: 6,
+      title: "Planifica cómo continuar operando y reabastecerte",
+      description: "Organiza cómo seguir vendiendo, produciendo o prestando servicios tras una emergencia.",
+      image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+      level: "Nivel Avanzado",
+      completed: false,
+      duration: "70 min"
+    }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -107,8 +165,8 @@ const Recursos = () => {
           </div>
         </div>
 
-        {/* Roadmap Section */}
-        <RoadmapSection />
+        {/* Roadmap Section with updated courses */}
+        <RoadmapSection courses={courses} />
         
         {/* Resources Section */}
         <section className="bcp-section bg-white">

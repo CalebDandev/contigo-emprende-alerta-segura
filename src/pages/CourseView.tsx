@@ -1,636 +1,473 @@
 
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { 
-  BookOpen, 
-  PlayCircle, 
-  CheckCircle, 
-  File, 
-  FileText, 
-  Download,
-  Award,
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import {
+  ArrowLeft,
+  Clock,
+  PlayCircle,
+  FileText,
+  ClipboardCheck,
+  CheckCircle,
   ChevronLeft,
   ChevronRight,
-  Clock,
+  BookOpen,
+  Download,
   MessageSquare,
-  HelpCircle,
-  User,
-  Play
+  Award,
+  Bookmark
 } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { Badge } from '@/components/ui/badge';
 
-const CourseView = () => {
-  const { courseId } = useParams();
-  const [activeModule, setActiveModule] = useState(1);
-  const [activePage, setActivePage] = useState(1);
+interface CourseParams {
+  courseId: string;
+}
+
+const CourseView: React.FC = () => {
+  const { courseId } = useParams<CourseParams>();
+  const [activeTab, setActiveTab] = useState("material");
+  const [progress, setProgress] = useState(0);
+  const [activeSectionId, setActiveSectionId] = useState(1);
   
-  // Find if we're viewing the financial management course
-  const isFinancialCourse = courseId === 'curso-3';
-  
-  // Mock course data - in a real app, you would fetch this based on the courseId
-  const courseData = isFinancialCourse ? {
-    id: 'curso-3',
-    title: 'Aprende a manejar tu dinero correctamente',
-    description: 'Herramientas prácticas para mejorar tu gestión financiera personal y de negocio.',
-    progress: 15,
-    instructor: 'Ana Martínez',
-    instructorRole: 'Especialista en Finanzas Personales',
-    duration: '1.5 horas',
-    lastUpdate: '12 de abril, 2025',
-    modules: [
+  // Simulated course data
+  const course = {
+    id: 1,
+    title: "Conoce los procesos clave de tu negocio",
+    description: "Identifica qué actividades son esenciales para que tu negocio siga funcionando.",
+    instructor: "Carlos Paredes",
+    instructorRole: "Especialista en Continuidad de Negocio",
+    instructorImage: "https://randomuser.me/api/portraits/men/32.jpg",
+    duration: "45 min",
+    level: "Nivel Inicial",
+    thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+    progress: 25,
+    sections: [
       {
-        id: 1,
-        title: 'Módulo 1: Aprende a armar un presupuesto',
+        id: 1, 
+        title: "Introducción a los procesos de negocio",
         completed: true,
-        duration: '15 min',
-        pages: [
-          { id: 1, title: 'Bienvenida al curso', type: 'video', duration: '5:20', completed: true },
-          { id: 2, title: 'Importancia del presupuesto', type: 'content', duration: '4 min', completed: true },
-          { id: 3, title: 'Elementos básicos de un presupuesto', type: 'content', duration: '6 min', completed: false }
-        ]
+        duration: "5 min",
+        type: "video"
       },
       {
         id: 2,
-        title: 'Módulo 2: Ahorra por un Plan',
+        title: "Identificando actividades esenciales",
         completed: false,
-        duration: '15 min',
-        pages: [
-          { id: 1, title: 'Estrategias de ahorro', type: 'video', duration: '7:45', completed: false },
-          { id: 2, title: 'Establecimiento de metas', type: 'content', duration: '5 min', completed: false },
-          { id: 3, title: 'Herramientas para seguimiento de ahorro', type: 'interactive', duration: '7 min', completed: false }
-        ]
+        duration: "15 min",
+        type: "video"
       },
       {
         id: 3,
-        title: 'Módulo 3: Maneja bien tus deudas',
+        title: "Guía: Mapeo de procesos críticos",
         completed: false,
-        duration: '30 min',
-        pages: [
-          { id: 1, title: 'Tipos de deuda: buena y mala', type: 'video', duration: '8:30', completed: false },
-          { id: 2, title: 'Estrategias para pago de deudas', type: 'content', duration: '10 min', completed: false },
-          { id: 3, title: 'Plantilla de control de deudas', type: 'download', size: '1.8 MB', completed: false },
-          { id: 4, title: 'Ejercicio práctico', type: 'activity', duration: '12 min', completed: false }
-        ]
+        type: "pdf",
+        size: "2.3 MB"
       },
       {
         id: 4,
-        title: 'Módulo 4: Usa canales digitales y aprende a prevenir fraudes',
+        title: "Evaluación de prioridades",
         completed: false,
-        duration: '25 min',
-        pages: [
-          { id: 1, title: 'Beneficios de la banca digital', type: 'video', duration: '6:15', completed: false },
-          { id: 2, title: 'Señales de alerta de fraude', type: 'content', duration: '8 min', completed: false },
-          { id: 3, title: 'Medidas de seguridad', type: 'content', duration: '5 min', completed: false },
-          { id: 4, title: 'Evaluación final', type: 'quiz', questions: 10, completed: false }
-        ]
-      }
-    ]
-  } : {
-    id: 'curso-1',
-    title: 'Fundamentos de resiliencia empresarial',
-    description: 'Conceptos básicos para preparar tu negocio ante situaciones adversas.',
-    progress: 35,
-    instructor: 'Carlos Rodríguez',
-    instructorRole: 'Especialista en Gestión de Crisis',
-    duration: '2 horas',
-    lastUpdate: '10 de abril, 2025',
-    modules: [
-      {
-        id: 1,
-        title: 'Introducción a la resiliencia empresarial',
-        completed: true,
-        pages: [
-          { id: 1, title: 'Bienvenida al curso', type: 'video', duration: '5:20', completed: true },
-          { id: 2, title: '¿Qué es la resiliencia empresarial?', type: 'content', duration: '8 min', completed: true },
-          { id: 3, title: 'Importancia para tu negocio', type: 'content', duration: '6 min', completed: true },
-          { id: 4, title: 'Cuestionario inicial', type: 'quiz', questions: 5, completed: true }
-        ]
-      },
-      {
-        id: 2,
-        title: 'Identificación de riesgos potenciales',
-        completed: false,
-        pages: [
-          { id: 1, title: 'Tipos de riesgos empresariales', type: 'video', duration: '7:45', completed: true },
-          { id: 2, title: 'Riesgos específicos por sector', type: 'content', duration: '10 min', completed: true },
-          { id: 3, title: 'Herramientas para mapeo de riesgos', type: 'interactive', duration: '12 min', completed: false },
-          { id: 4, title: 'Actividad práctica: Mapa de riesgos', type: 'activity', duration: '15 min', completed: false }
-        ]
-      },
-      {
-        id: 3,
-        title: 'Planes de contingencia básicos',
-        completed: false,
-        pages: [
-          { id: 1, title: 'Elementos de un plan de contingencia', type: 'video', duration: '8:30', completed: false },
-          { id: 2, title: 'Plantillas y ejemplos', type: 'download', size: '2.3 MB', completed: false },
-          { id: 3, title: 'Adaptación a tu negocio', type: 'content', duration: '9 min', completed: false },
-          { id: 4, title: 'Evaluación intermedia', type: 'quiz', questions: 8, completed: false }
-        ]
-      },
-      {
-        id: 4,
-        title: 'Comunicación de crisis',
-        completed: false,
-        pages: [
-          { id: 1, title: 'Principios de comunicación efectiva', type: 'video', duration: '6:15', completed: false },
-          { id: 2, title: 'Plantillas de comunicados', type: 'download', size: '1.8 MB', completed: false },
-          { id: 3, title: 'Simulación de crisis', type: 'interactive', duration: '20 min', completed: false }
-        ]
+        duration: "10 min",
+        type: "quiz"
       },
       {
         id: 5,
-        title: 'Recuperación y mejora continua',
+        title: "Ejercicio práctico",
         completed: false,
-        pages: [
-          { id: 1, title: 'Fases de recuperación', type: 'content', duration: '7 min', completed: false },
-          { id: 2, title: 'Indicadores de seguimiento', type: 'content', duration: '8 min', completed: false },
-          { id: 3, title: 'Implementación práctica', type: 'activity', duration: '25 min', completed: false },
-          { id: 4, title: 'Certificación final', type: 'quiz', questions: 10, completed: false }
-        ]
+        duration: "15 min",
+        type: "activity"
       }
     ]
   };
 
-  const currentModule = courseData.modules.find(module => module.id === activeModule) || courseData.modules[0];
-  const currentPage = currentModule.pages.find(page => page.id === activePage) || currentModule.pages[0];
-  
-  const totalPages = courseData.modules.reduce((total, module) => total + module.pages.length, 0);
-  const completedPages = courseData.modules.reduce((total, module) => {
-    return total + module.pages.filter(page => page.completed).length;
-  }, 0);
-  
-  const overallProgress = Math.round((completedPages / totalPages) * 100);
+  useEffect(() => {
+    // Simulate loading course progress
+    setProgress(course.progress);
+  }, [course.id]);
 
-  const navigateToNextPage = () => {
-    const currentModuleIndex = courseData.modules.findIndex(m => m.id === activeModule);
-    const currentPageIndex = currentModule.pages.findIndex(p => p.id === activePage);
-    
-    if (currentPageIndex < currentModule.pages.length - 1) {
-      // Next page in the same module
-      setActivePage(currentModule.pages[currentPageIndex + 1].id);
-    } else if (currentModuleIndex < courseData.modules.length - 1) {
-      // First page of the next module
-      setActiveModule(courseData.modules[currentModuleIndex + 1].id);
-      setActivePage(courseData.modules[currentModuleIndex + 1].pages[0].id);
-    }
-  };
-
-  const navigateToPrevPage = () => {
-    const currentModuleIndex = courseData.modules.findIndex(m => m.id === activeModule);
-    const currentPageIndex = currentModule.pages.findIndex(p => p.id === activePage);
-    
-    if (currentPageIndex > 0) {
-      // Previous page in the same module
-      setActivePage(currentModule.pages[currentPageIndex - 1].id);
-    } else if (currentModuleIndex > 0) {
-      // Last page of the previous module
-      const prevModule = courseData.modules[currentModuleIndex - 1];
-      setActiveModule(prevModule.id);
-      setActivePage(prevModule.pages[prevModule.pages.length - 1].id);
-    }
-  };
-
-  const getIconForPageType = (type) => {
-    switch(type) {
-      case 'video': return <PlayCircle className="h-4 w-4" />;
-      case 'content': return <FileText className="h-4 w-4" />;
-      case 'quiz': return <MessageSquare className="h-4 w-4" />;
-      case 'activity': return <User className="h-4 w-4" />;
-      case 'download': return <Download className="h-4 w-4" />;
-      case 'interactive': return <HelpCircle className="h-4 w-4" />;
-      default: return <File className="h-4 w-4" />;
-    }
-  };
-
-  // Simulate page content based on type
-  const renderPageContent = () => {
-    switch(currentPage.type) {
-      case 'video':
-        return (
-          <div className="aspect-video bg-gray-800 rounded-lg mb-8 overflow-hidden">
-            {isFinancialCourse ? (
-              <img 
-                src="/lovable-uploads/3d653eae-420e-477c-92dc-73d4bd3dbf9c.png" 
-                alt="Curso de finanzas" 
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center">
-                  <PlayCircle className="h-16 w-16 text-white/60 mx-auto mb-4" />
-                  <p className="text-white text-lg">Video: {currentPage.title}</p>
-                  <p className="text-white/70">Duración: {currentPage.duration}</p>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      case 'content':
-        return (
-          <div className="prose max-w-none mb-8">
-            <h2>{currentPage.title}</h2>
-            <p>
-              {isFinancialCourse ? 
-                'Para tener un control eficiente de tus finanzas personales, es fundamental comenzar por crear un presupuesto detallado. Este te permitirá visualizar claramente tus ingresos, gastos y establecer metas de ahorro realistas.' : 
-                'La resiliencia empresarial es la capacidad de una organización para anticipar, prepararse, responder y adaptarse a cambios incrementales y disrupciones repentinas para sobrevivir y prosperar. En el contexto de pequeños emprendimientos, esto significa tener la capacidad de recuperarse rápidamente de situaciones adversas, como desastres naturales, crisis económicas o cambios en el mercado.'
-              }
-            </p>
-            <p>
-              {isFinancialCourse ? 'Los elementos clave de un presupuesto incluyen:' : 'Los negocios resilientes se caracterizan por:'}
-            </p>
-            <ul>
-              {isFinancialCourse ? (
-                <>
-                  <li>Registro detallado de ingresos mensuales</li>
-                  <li>Categorización de gastos fijos y variables</li>
-                  <li>Asignación para ahorros e inversiones</li>
-                  <li>Fondo de emergencia</li>
-                  <li>Sistema de seguimiento regular</li>
-                </>
-              ) : (
-                <>
-                  <li>Capacidad de adaptación al cambio</li>
-                  <li>Redundancia en sistemas críticos</li>
-                  <li>Planificación previa para diferentes escenarios</li>
-                  <li>Cultura organizacional que fomenta la innovación y flexibilidad</li>
-                  <li>Sistemas de alerta temprana</li>
-                </>
-              )}
-            </ul>
-            <p>
-              {isFinancialCourse ? 
-                'Desarrollar un buen presupuesto te permitirá tomar decisiones financieras más informadas y alcanzar tus metas económicas más rápidamente.' : 
-                'Desarrollar estas capacidades permitirá a tu negocio no solo sobrevivir en tiempos difíciles, sino incluso encontrar oportunidades de crecimiento durante las crisis.'}
-            </p>
-          </div>
-        );
-      case 'quiz':
-        return (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
-            <h3 className="text-xl font-bold mb-4">Cuestionario: {currentPage.title}</h3>
-            <p className="mb-4">Este cuestionario consta de {currentPage.questions} preguntas y evaluará tu comprensión de los conceptos clave de este módulo.</p>
-            <div className="space-y-4 mb-6">
-              <div className="bg-white p-4 rounded border border-gray-200">
-                <p className="font-medium mb-2">{isFinancialCourse ? 
-                '1. ¿Cuál de los siguientes NO es un componente esencial de un presupuesto efectivo?' : 
-                '1. ¿Cuál de las siguientes NO es una característica de un negocio resiliente?'}</p>
-                <div className="space-y-2">
-                  <div className="flex items-center">
-                    <input type="radio" id="q1a" name="q1" className="mr-2" />
-                    <label htmlFor="q1a">{isFinancialCourse ? 'Registro de ingresos' : 'Flexibilidad operativa'}</label>
-                  </div>
-                  <div className="flex items-center">
-                    <input type="radio" id="q1b" name="q1" className="mr-2" />
-                    <label htmlFor="q1b">{isFinancialCourse ? 'Categorización de gastos' : 'Planificación de contingencia'}</label>
-                  </div>
-                  <div className="flex items-center">
-                    <input type="radio" id="q1c" name="q1" className="mr-2" />
-                    <label htmlFor="q1c">{isFinancialCourse ? 'Comparación con los gastos de amigos' : 'Resistencia al cambio'}</label>
-                  </div>
-                  <div className="flex items-center">
-                    <input type="radio" id="q1d" name="q1" className="mr-2" />
-                    <label htmlFor="q1d">{isFinancialCourse ? 'Fondo de emergencia' : 'Diversificación de recursos'}</label>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white p-4 rounded border border-gray-200">
-                <p className="font-medium mb-2">{isFinancialCourse ?
-                '2. ¿Por qué es importante establecer metas financieras específicas en tu presupuesto?' :
-                '2. ¿Por qué es importante tener un plan de resiliencia para tu negocio?'}</p>
-                {/* More quiz questions would be here */}
-              </div>
-            </div>
-            <Button className="w-full">Enviar respuestas</Button>
-          </div>
-        );
-      case 'download':
-        return (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 flex flex-col items-center text-center">
-            <FileText className="h-16 w-16 text-bcp-blue mb-4" />
-            <h3 className="text-xl font-bold mb-2">{currentPage.title}</h3>
-            <p className="mb-4">Este recurso descargable contiene plantillas y ejemplos que podrás utilizar en tu negocio.</p>
-            <p className="text-sm text-gray-600 mb-6">Formato: PDF • Tamaño: {currentPage.size}</p>
-            <Button className="flex items-center">
-              <Download className="mr-2 h-4 w-4" />
-              Descargar material
-            </Button>
-          </div>
-        );
-      default:
-        return (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8 text-center">
-            <h3 className="text-xl font-bold mb-2">{currentPage.title}</h3>
-            <p>Contenido de tipo {currentPage.type}.</p>
-          </div>
-        );
-    }
-  };
+  const activeSection = course.sections.find(section => section.id === activeSectionId) || course.sections[0];
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">
-        <div className="bg-gray-100 py-8">
+        <div className="bg-gray-100 py-4">
           <div className="bcp-container">
-            <nav className="flex py-3 text-sm" aria-label="Breadcrumb">
-              <ol className="flex items-center space-x-2">
-                <li>
-                  <a href="/" className="text-gray-500 hover:text-bcp-blue">Inicio</a>
-                </li>
-                <li>
-                  <span className="text-gray-500 mx-2">/</span>
-                </li>
-                <li>
-                  <a href="/" className="text-gray-500 hover:text-bcp-blue">Contigo Emprendedor</a>
-                </li>
-                <li>
-                  <span className="text-gray-500 mx-2">/</span>
-                </li>
-                <li>
-                  <a href="/cursos" className="text-gray-500 hover:text-bcp-blue">Cursos</a>
-                </li>
-                <li>
-                  <span className="text-gray-500 mx-2">/</span>
-                </li>
-                <li className="text-bcp-blue font-medium" aria-current="page">
-                  {courseData.title}
-                </li>
-              </ol>
+            <nav className="flex items-center text-sm">
+              <Link to="/cursos" className="flex items-center text-gray-600 hover:text-bcp-blue">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Volver a cursos
+              </Link>
             </nav>
           </div>
         </div>
-        
-        <div className="bg-bcp-blue text-white py-6">
+
+        {/* Course Header */}
+        <section className="bg-gradient-bcp text-white py-10">
           <div className="bcp-container">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <h1 className="text-2xl lg:text-3xl font-bold mb-2">{courseData.title}</h1>
-                <p className="text-blue-100">{courseData.description}</p>
-              </div>
-              <div className="mt-4 lg:mt-0 flex items-center">
-                <div className="mr-8">
-                  <div className="text-sm text-blue-200 mb-1">Progreso general</div>
-                  <div className="flex items-center">
-                    <div className="w-32 h-2 bg-blue-900 rounded-full mr-3">
-                      <div 
-                        className="h-full bg-white rounded-full" 
-                        style={{ width: `${overallProgress}%` }} 
-                      />
-                    </div>
-                    <span className="text-sm font-medium">{overallProgress}%</span>
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="md:w-2/3">
+                <h1 className="text-3xl font-bold mb-4">{course.title}</h1>
+                <p className="text-lg mb-6">{course.description}</p>
+                
+                <div className="flex flex-wrap gap-3">
+                  <div className="flex items-center bg-white/20 rounded-full px-4 py-1">
+                    <Clock className="h-4 w-4 mr-2" />
+                    <span>{course.duration}</span>
+                  </div>
+                  <div className="flex items-center bg-white/20 rounded-full px-4 py-1">
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    <span>{course.level}</span>
                   </div>
                 </div>
-                <div>
-                  <div className="text-sm text-blue-200 mb-1">Instructor</div>
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 bg-blue-800 rounded-full mr-2 flex items-center justify-center">
-                      <User className="h-4 w-4" />
+
+                <div className="mt-8">
+                  <div className="flex items-center mb-2">
+                    <span className="text-sm">Progreso del curso</span>
+                    <span className="ml-auto text-sm">{progress}%</span>
+                  </div>
+                  <Progress value={progress} className="h-2 bg-white/30" />
+                </div>
+              </div>
+              
+              <div className="md:w-1/3">
+                <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+                  <div className="relative">
+                    <img 
+                      src={course.thumbnail} 
+                      alt={course.title} 
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                      <PlayCircle className="h-16 w-16 text-white" />
                     </div>
-                    <div className="text-sm">
-                      <div className="font-medium">{courseData.instructor}</div>
-                      <div className="text-blue-200 text-xs">{courseData.instructorRole}</div>
+                  </div>
+                  
+                  <div className="p-4">
+                    <div className="flex items-center mb-4">
+                      <img 
+                        src={course.instructorImage} 
+                        alt={course.instructor} 
+                        className="h-12 w-12 rounded-full mr-3"
+                      />
+                      <div>
+                        <h3 className="font-medium text-gray-900">{course.instructor}</h3>
+                        <p className="text-sm text-gray-600">{course.instructorRole}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button className="flex-1">
+                        <PlayCircle className="h-4 w-4 mr-2" />
+                        Continuar
+                      </Button>
+                      <Button variant="outline">
+                        <Bookmark className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div className="bcp-container py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Sidebar navigation */}
-            <div className="order-2 lg:order-1 lg:col-span-1">
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                <div className="p-4 border-b border-gray-200">
-                  <h3 className="font-bold text-lg flex items-center">
-                    <BookOpen className="h-5 w-5 mr-2 text-bcp-blue" />
-                    Contenido del curso
-                  </h3>
-                </div>
-                
-                <ScrollArea className="h-[calc(100vh-400px)] lg:h-[calc(100vh-300px)]">
-                  <div className="p-4 space-y-6">
-                    {courseData.modules.map((module) => (
-                      <div key={module.id} className="space-y-3">
-                        <div className={`flex items-center space-x-3 p-2 rounded ${activeModule === module.id ? 'bg-blue-50 text-bcp-blue' : ''}`}>
-                          {module.completed ? 
-                            <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" /> :
-                            <div className="h-5 w-5 rounded-full border-2 border-gray-300 flex-shrink-0"></div>
-                          }
-                          <button 
-                            onClick={() => {
-                              setActiveModule(module.id);
-                              setActivePage(module.pages[0].id);
-                            }}
-                            className="font-medium text-left flex-grow"
-                          >
-                            {module.title}
-                          </button>
-                          {module.duration && (
-                            <span className="text-xs text-gray-500 whitespace-nowrap">{module.duration}</span>
-                          )}
-                        </div>
-                        
-                        {activeModule === module.id && (
-                          <div className="pl-10 space-y-2">
-                            {module.pages.map((page) => (
-                              <button
-                                key={page.id}
-                                onClick={() => setActivePage(page.id)}
-                                className={`flex items-center text-sm py-1 pl-2 w-full text-left rounded ${activePage === page.id ? 'bg-blue-100' : ''}`}
-                              >
-                                <span className="mr-2 text-gray-500">
-                                  {getIconForPageType(page.type)}
-                                </span>
-                                <span className={`flex-grow ${page.completed ? 'text-gray-500' : ''}`}>
-                                  {page.title}
-                                </span>
-                                {page.completed && (
-                                  <CheckCircle className="h-3 w-3 text-green-500 ml-2" />
-                                )}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
+        </section>
 
-                <div className="p-4 bg-gray-50 border-t border-gray-200">
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      <span>Duración: {courseData.duration}</span>
-                    </div>
-                    <div>
-                      Actualizado: {courseData.lastUpdate}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-6 bg-white rounded-lg border border-gray-200 p-4">
-                <h3 className="font-bold mb-3">Recursos adicionales</h3>
-                <ul className="space-y-2">
-                  <li>
-                    <a href="#" className="flex items-center text-bcp-blue hover:underline">
-                      <Download className="h-4 w-4 mr-2" />
-                      Guía completa PDF
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="flex items-center text-bcp-blue hover:underline">
-                      <FileText className="h-4 w-4 mr-2" />
-                      Plantillas y formatos
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="flex items-center text-bcp-blue hover:underline">
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Foro de preguntas
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            
-            {/* Main content area */}
-            <div className="order-1 lg:order-2 lg:col-span-3">
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold">{currentPage.title}</h2>
-                  <Badge variant="outline" className="flex items-center">
-                    {getIconForPageType(currentPage.type)}
-                    <span className="ml-1 capitalize">{currentPage.type}</span>
-                  </Badge>
-                </div>
-                
-                <div className="mb-8">
-                  {renderPageContent()}
-                </div>
-                
-                <div className="flex justify-between pt-4 border-t border-gray-200">
-                  <Button 
-                    variant="outline"
-                    onClick={navigateToPrevPage}
-                    disabled={activeModule === 1 && activePage === 1}
-                    className="flex items-center"
-                  >
-                    <ChevronLeft className="h-4 w-4 mr-2" />
-                    Anterior
-                  </Button>
-                  
-                  <Button 
-                    onClick={navigateToNextPage}
-                    className="flex items-center"
-                  >
-                    Siguiente
-                    <ChevronRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </div>
-              </div>
-              
-              <div className="mt-8">
-                <Tabs defaultValue="discussion">
-                  <TabsList className="w-full grid grid-cols-3 mb-4">
-                    <TabsTrigger value="discussion">Discusión</TabsTrigger>
-                    <TabsTrigger value="notes">Mis notas</TabsTrigger>
-                    <TabsTrigger value="resources">Recursos</TabsTrigger>
+        {/* Course Content */}
+        <section className="py-8">
+          <div className="bcp-container">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="lg:w-2/3">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-3 mb-8">
+                    <TabsTrigger value="material">Material del curso</TabsTrigger>
+                    <TabsTrigger value="discusion">Discusión</TabsTrigger>
+                    <TabsTrigger value="recursos">Recursos</TabsTrigger>
                   </TabsList>
                   
-                  <TabsContent value="discussion" className="bg-white rounded-lg border border-gray-200 p-6">
-                    <h3 className="text-lg font-bold mb-4">Discusión del tema</h3>
-                    <div className="mb-4">
-                      <p className="text-gray-600 mb-4">
-                        Comparte tus dudas o comentarios sobre este tema con otros participantes y el instructor.
-                      </p>
-                      <textarea 
-                        className="w-full border border-gray-300 rounded-lg p-3" 
-                        rows={3} 
-                        placeholder="Escribe tu comentario o pregunta..."
-                      ></textarea>
-                      <div className="flex justify-end mt-2">
-                        <Button>Publicar comentario</Button>
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className="flex justify-between mb-2">
-                          <div className="font-medium">María González</div>
-                          <div className="text-sm text-gray-500">Hace 2 días</div>
+                  <TabsContent value="material" className="space-y-6">
+                    {/* Current Section Display */}
+                    <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                      <div className="mb-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <h2 className="text-xl font-bold">{activeSection.title}</h2>
+                          <Badge variant="outline" className={`
+                            ${activeSection.type === 'video' ? 'bg-blue-50 text-blue-700 border-blue-200' : 
+                              activeSection.type === 'pdf' ? 'bg-red-50 text-red-700 border-red-200' :
+                              activeSection.type === 'quiz' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                              'bg-green-50 text-green-700 border-green-200'}
+                          `}>
+                            {activeSection.type === 'video' ? 'Video' : 
+                             activeSection.type === 'pdf' ? 'Documento PDF' : 
+                             activeSection.type === 'quiz' ? 'Cuestionario' : 'Actividad'}
+                          </Badge>
                         </div>
-                        <p className="text-gray-600">
-                          {isFinancialCourse ? 
-                            'Excelente explicación sobre presupuestos. ¿Recomiendan alguna app específica para llevar el control de gastos?' : 
-                            'Excelente material. Me gustaría saber si estos conceptos aplican igual para negocios pequeños o principalmente son para empresas medianas.'}
-                        </p>
-                        <div className="mt-3 pl-4 border-l-2 border-gray-300">
-                          <div className="flex justify-between mb-1">
-                            <div className="font-medium text-bcp-blue">{isFinancialCourse ? 'Ana Martínez (Instructora)' : 'Carlos Rodríguez (Instructor)'}</div>
-                            <div className="text-sm text-gray-500">Hace 1 día</div>
-                          </div>
-                          <p className="text-gray-600">
-                            {isFinancialCourse ? 
-                              'Hola María, recomiendo YNAB (You Need A Budget) o Mint. En el módulo 2 exploraremos algunas herramientas gratuitas.' : 
-                              'Hola María, los conceptos son adaptables a negocios de cualquier tamaño. En la sección 2.3 veremos ejemplos específicos para microempresas.'}
+                        
+                        {activeSection.duration && (
+                          <p className="text-sm text-gray-600 flex items-center">
+                            <Clock className="h-4 w-4 mr-1" />
+                            Duración: {activeSection.duration}
                           </p>
+                        )}
+                        {activeSection.size && (
+                          <p className="text-sm text-gray-600 flex items-center">
+                            <FileText className="h-4 w-4 mr-1" />
+                            Tamaño: {activeSection.size}
+                          </p>
+                        )}
+                      </div>
+                      
+                      {/* Content based on section type */}
+                      {activeSection.type === 'video' && (
+                        <div className="relative rounded-lg overflow-hidden bg-gray-100 h-[400px] flex items-center justify-center">
+                          <PlayCircle className="h-20 w-20 text-bcp-blue" />
                         </div>
+                      )}
+                      
+                      {activeSection.type === 'pdf' && (
+                        <div className="border border-gray-200 rounded-lg p-4 text-center">
+                          <FileText className="h-16 w-16 text-red-500 mx-auto mb-4" />
+                          <p className="text-gray-700 mb-4">
+                            Guía de mapeo de procesos críticos para PYMES
+                          </p>
+                          <Button>
+                            <Download className="h-4 w-4 mr-2" />
+                            Descargar PDF
+                          </Button>
+                        </div>
+                      )}
+                      
+                      {activeSection.type === 'quiz' && (
+                        <div>
+                          <p className="text-gray-700 mb-6">
+                            En este breve cuestionario, evaluaremos tu comprensión sobre la identificación y priorización de procesos de negocio.
+                          </p>
+                          
+                          <div className="space-y-6">
+                            <div className="border border-gray-200 rounded-lg p-4">
+                              <h3 className="font-medium mb-3">1. ¿Cuál de los siguientes NO es un criterio para determinar si un proceso es crítico?</h3>
+                              <div className="space-y-2">
+                                <div className="flex items-center">
+                                  <input type="radio" id="q1-a" name="q1" className="mr-3" />
+                                  <label htmlFor="q1-a">Impacto financiero</label>
+                                </div>
+                                <div className="flex items-center">
+                                  <input type="radio" id="q1-b" name="q1" className="mr-3" />
+                                  <label htmlFor="q1-b">Popularidad del proceso entre los empleados</label>
+                                </div>
+                                <div className="flex items-center">
+                                  <input type="radio" id="q1-c" name="q1" className="mr-3" />
+                                  <label htmlFor="q1-c">Satisfacción del cliente</label>
+                                </div>
+                                <div className="flex items-center">
+                                  <input type="radio" id="q1-d" name="q1" className="mr-3" />
+                                  <label htmlFor="q1-d">Requisitos legales</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-6 flex justify-end">
+                            <Button>Verificar respuestas</Button>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {activeSection.type === 'activity' && (
+                        <div>
+                          <p className="text-gray-700 mb-6">
+                            En esta actividad práctica, crearás un mapa básico de procesos críticos para tu negocio utilizando la plantilla proporcionada.
+                          </p>
+                          
+                          <ol className="list-decimal pl-5 space-y-4 mb-6">
+                            <li>Descarga la plantilla de mapeo de procesos</li>
+                            <li>Identifica hasta 5 procesos críticos de tu negocio</li>
+                            <li>Califica cada uno según los criterios explicados en el video</li>
+                            <li>Sube tu documento completado para recibir retroalimentación</li>
+                          </ol>
+                          
+                          <div className="flex gap-4">
+                            <Button variant="outline">
+                              <Download className="h-4 w-4 mr-2" />
+                              Descargar plantilla
+                            </Button>
+                            <Button>
+                              Subir actividad completada
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Navigation Buttons */}
+                      <div className="flex justify-between mt-6 pt-6 border-t border-gray-200">
+                        <Button 
+                          variant="outline" 
+                          disabled={activeSectionId === 1}
+                          onClick={() => setActiveSectionId(Math.max(1, activeSectionId - 1))}
+                        >
+                          <ChevronLeft className="h-4 w-4 mr-2" />
+                          Anterior
+                        </Button>
+                        
+                        <Button
+                          disabled={activeSectionId === course.sections.length}
+                          onClick={() => setActiveSectionId(Math.min(course.sections.length, activeSectionId + 1))}
+                        >
+                          Siguiente
+                          <ChevronRight className="h-4 w-4 ml-2" />
+                        </Button>
                       </div>
                     </div>
                   </TabsContent>
                   
-                  <TabsContent value="notes" className="bg-white rounded-lg border border-gray-200 p-6">
-                    <h3 className="text-lg font-bold mb-4">Mis notas</h3>
-                    <p className="text-gray-600 mb-4">
-                      Toma notas para recordar puntos importantes de este tema. Estas notas son privadas y solo tú puedes verlas.
-                    </p>
-                    <textarea 
-                      className="w-full border border-gray-300 rounded-lg p-3" 
-                      rows={6} 
-                      placeholder="Escribe tus notas aquí..."
-                    ></textarea>
-                    <div className="flex justify-end mt-2">
-                      <Button variant="outline">Guardar notas</Button>
+                  <TabsContent value="discusion">
+                    <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                      <h2 className="text-xl font-bold mb-4">Discusión del curso</h2>
+                      <p className="text-gray-600 mb-6">
+                        Comparte tus dudas o comentarios con el instructor y otros estudiantes del curso.
+                      </p>
+                      
+                      <div className="border border-gray-200 rounded-lg p-6 mb-6">
+                        <textarea 
+                          placeholder="Escribe tu pregunta o comentario aquí..."
+                          className="w-full border border-gray-300 rounded-md p-3 mb-4 h-32"
+                        ></textarea>
+                        <div className="flex justify-end">
+                          <Button>
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Publicar comentario
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-6">
+                        <p className="text-center text-gray-500">Aún no hay comentarios en este curso. ¡Sé el primero en participar!</p>
+                      </div>
                     </div>
                   </TabsContent>
                   
-                  <TabsContent value="resources" className="bg-white rounded-lg border border-gray-200 p-6">
-                    <h3 className="text-lg font-bold mb-4">Recursos de aprendizaje</h3>
-                    <ul className="space-y-2">
-                      <li className="flex items-center p-2 border-b border-gray-100">
-                        <FileText className="h-5 w-5 text-bcp-blue mr-3" />
-                        <span className="flex-grow">{isFinancialCourse ? 'Guía completa de gestión financiera' : 'Guía completa de resiliencia empresarial'}</span>
-                        <Button variant="outline" size="sm" className="flex items-center">
-                          <Download className="h-3 w-3 mr-1" />
-                          PDF
-                        </Button>
-                      </li>
-                      <li className="flex items-center p-2 border-b border-gray-100">
-                        <PlayCircle className="h-5 w-5 text-bcp-blue mr-3" />
-                        <span className="flex-grow">{isFinancialCourse ? 'Video: Claves para un presupuesto exitoso' : 'Video: Ejemplos reales de negocios resilientes'}</span>
-                        <Button variant="outline" size="sm">Ver</Button>
-                      </li>
-                      <li className="flex items-center p-2">
-                        <FileText className="h-5 w-5 text-bcp-blue mr-3" />
-                        <span className="flex-grow">{isFinancialCourse ? 'Plantilla: Control de gastos e ingresos' : 'Plantilla: Evaluación de riesgos'}</span>
-                        <Button variant="outline" size="sm">XLSX</Button>
-                      </li>
-                    </ul>
+                  <TabsContent value="recursos">
+                    <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                      <h2 className="text-xl font-bold mb-4">Recursos adicionales</h2>
+                      <p className="text-gray-600 mb-6">
+                        Material complementario para profundizar en los temas del curso.
+                      </p>
+                      
+                      <div className="space-y-4">
+                        <div className="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                          <div className="flex items-center">
+                            <FileText className="h-6 w-6 text-red-500 mr-3" />
+                            <div>
+                              <h3 className="font-medium">Guía completa de procesos de negocio</h3>
+                              <p className="text-sm text-gray-500">PDF • 4.2 MB</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm">
+                            <Download className="h-4 w-4 mr-2" />
+                            Descargar
+                          </Button>
+                        </div>
+                        
+                        <div className="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                          <div className="flex items-center">
+                            <FileText className="h-6 w-6 text-green-500 mr-3" />
+                            <div>
+                              <h3 className="font-medium">Plantilla de análisis de impacto</h3>
+                              <p className="text-sm text-gray-500">Excel • 850 KB</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm">
+                            <Download className="h-4 w-4 mr-2" />
+                            Descargar
+                          </Button>
+                        </div>
+                        
+                        <div className="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+                          <div className="flex items-center">
+                            <PlayCircle className="h-6 w-6 text-blue-500 mr-3" />
+                            <div>
+                              <h3 className="font-medium">Caso de éxito: Bodega "La Prosperidad"</h3>
+                              <p className="text-sm text-gray-500">Video • 12:45 min</p>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm">
+                            <PlayCircle className="h-4 w-4 mr-2" />
+                            Ver video
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   </TabsContent>
                 </Tabs>
               </div>
+              
+              <div className="lg:w-1/3">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                  <div className="p-4 bg-gray-50 border-b border-gray-200">
+                    <h2 className="font-bold">Contenido del curso</h2>
+                  </div>
+                  
+                  <div className="p-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <p className="text-sm text-gray-600">
+                        <span>{course.sections.filter(s => s.completed).length}</span> de <span>{course.sections.length}</span> completados
+                      </p>
+                      <p className="text-sm font-medium">{progress}%</p>
+                    </div>
+                    <Progress value={progress} className="h-2" />
+                  </div>
+                  
+                  <ul className="divide-y divide-gray-200">
+                    {course.sections.map((section) => (
+                      <li 
+                        key={section.id}
+                        className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${section.id === activeSectionId ? 'bg-blue-50' : ''}`}
+                        onClick={() => setActiveSectionId(section.id)}
+                      >
+                        <div className="flex items-start">
+                          <div className="flex-shrink-0 mt-1">
+                            {section.completed ? (
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            ) : (
+                              <div className={`h-5 w-5 rounded-full border ${section.id === activeSectionId ? 'border-blue-500' : 'border-gray-300'}`} />
+                            )}
+                          </div>
+                          <div className="ml-3 flex-1">
+                            <p className={`text-sm font-medium ${section.completed ? 'text-green-600' : section.id === activeSectionId ? 'text-blue-700' : 'text-gray-900'}`}>
+                              {section.title}
+                            </p>
+                            <div className="flex items-center mt-1 text-xs text-gray-500">
+                              {section.type === 'video' && <PlayCircle className="h-3 w-3 mr-1" />}
+                              {section.type === 'pdf' && <FileText className="h-3 w-3 mr-1" />}
+                              {section.type === 'quiz' && <ClipboardCheck className="h-3 w-3 mr-1" />}
+                              {section.type === 'activity' && <FileText className="h-3 w-3 mr-1" />}
+                              
+                              {section.duration && <span>{section.duration}</span>}
+                              {section.size && <span>{section.size}</span>}
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div className="p-4 bg-amber-50 border-t border-amber-200">
+                    <div className="flex items-center">
+                      <Award className="h-5 w-5 text-amber-500 mr-3" />
+                      <div>
+                        <h3 className="text-sm font-medium text-amber-800">Certificado del curso</h3>
+                        <p className="text-xs text-amber-700">Disponible al completar el 100% del contenido</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
       </main>
       <Footer />
     </div>

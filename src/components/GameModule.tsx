@@ -21,6 +21,7 @@ import GamesSection from './game/GamesSection';
 import RewardsSection from './game/RewardsSection';
 import ProfileSection from './game/ProfileSection';
 import LeaderboardSection from './game/LeaderboardSection';
+import BenefitsSection from './game/BenefitsSection';
 
 const GameModule = () => {
   const [userCoins, setUserCoins] = useState(0);
@@ -127,8 +128,9 @@ const GameModule = () => {
         </div>
 
         <Tabs defaultValue="juegos" onValueChange={setActiveTab} value={activeTab} className="w-full">
-          <TabsList className="grid grid-cols-4 mb-8">
+          <TabsList className="grid grid-cols-5 mb-8">
             <TabsTrigger value="juegos">Desafíos</TabsTrigger>
+            <TabsTrigger value="beneficios">Beneficios</TabsTrigger>
             <TabsTrigger value="recompensas">Arsenal</TabsTrigger>
             <TabsTrigger value="perfil">Mi Perfil</TabsTrigger>
             <TabsTrigger value="ranking">Ranking</TabsTrigger>
@@ -136,6 +138,10 @@ const GameModule = () => {
           
           <TabsContent value="juegos">
             <GamesSection onEarnCoins={handleEarnCoins} />
+          </TabsContent>
+          
+          <TabsContent value="beneficios">
+            <BenefitsSection />
           </TabsContent>
           
           <TabsContent value="recompensas">

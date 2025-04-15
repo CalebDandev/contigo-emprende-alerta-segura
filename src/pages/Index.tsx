@@ -24,11 +24,18 @@ const Index = () => {
               <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
                 <div className="flex flex-col md:flex-row gap-6 items-center mb-6">
                   <div className="w-full md:w-1/3">
-                    <img 
-                      src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" 
-                      alt="María en su tienda" 
-                      className="rounded-lg w-full h-auto"
-                    />
+                    <div className="relative rounded-lg overflow-hidden">
+                      <div className="aspect-w-16 aspect-h-9">
+                        <iframe 
+                          className="w-full h-full"
+                          src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                          title="Historia de María" 
+                          frameBorder="0" 
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                    </div>
                   </div>
                   <div className="w-full md:w-2/3">
                     <p className="text-lg text-gray-700 mb-4">
